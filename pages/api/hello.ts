@@ -1,13 +1,8 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { AuthorizedApiHandlerParams } from '@interfaces/api'
+import { authorizedApiHandler } from '@lib/apiHandler'
 
-type Data = {
-  name: string
+async function hello({ req, res, jwt }: AuthorizedApiHandlerParams) {
+  return res.status(200).json(jwt)
 }
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  res.status(200).json({ name: 'John Doe' })
-}
+export default authorizedApiHandler({ GET: hello })
