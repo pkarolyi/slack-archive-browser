@@ -21,9 +21,14 @@
       "@lib/*": ["lib/*"],
       "@pages/*": ["pages/*"],
       "@public/*": ["public/*"],
-      "@styles/*": ["styles/*"],
+      "@styles/*": ["styles/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
 }

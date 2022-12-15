@@ -40,3 +40,19 @@ model User {
   image         String?
   accounts      Account[]
 }
+
+model ArchiveChannel {
+  id             String           @id @default(cuid())
+  name           String
+  ArchiveMessage ArchiveMessage[]
+}
+
+model ArchiveMessage {
+  id        String   @id @default(cuid())
+  ts        DateTime @db.Timestamptz()
+  text      String
+  name      String
+  channelId String
+
+  channel ArchiveChannel @relation(fields: [channelId], references: [id])
+}
