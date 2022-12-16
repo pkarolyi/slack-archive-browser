@@ -50,11 +50,13 @@ model ArchiveChannel {
 }
 
 model ArchiveMessage {
-  id        String   @id @default(cuid())
-  ts        DateTime @db.Timestamptz()
+  id        String @id @default(cuid())
+  ts        String
   text      String
   name      String
   channelId String
 
   channel ArchiveChannel @relation(fields: [channelId], references: [id])
+
+  @@unique([channelId, ts])
 }

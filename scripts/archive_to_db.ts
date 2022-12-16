@@ -31,7 +31,7 @@ async function main() {
     for (const file of files) {
       const messages = JSON.parse(fs.readFileSync(file).toString())
       const strippedMessages = messages.map((m: any) => ({
-        ts: new Date(parseFloat(m.ts) * 1000),
+        ts: m.ts,
         text: m.text || '',
         name: m.user_profile?.name || m.user || '',
         channelId,
