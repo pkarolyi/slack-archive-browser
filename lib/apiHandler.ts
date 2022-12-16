@@ -7,7 +7,7 @@ import type {
   AuthorizedApiHandler,
 } from '@interfaces/api'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { getToken } from 'next-auth/jwt'
+import { getToken, JWT } from 'next-auth/jwt'
 
 export function unauthorizedApiHandler(handlers: ApiHandlers) {
   const internalAPIHandler = async (
@@ -33,8 +33,11 @@ export function authorizedApiHandler(handlers: AuthorizedApiHandlers) {
     try {
       const handler = getHandler({ req, res }, handlers)
 
-      const jwt = await getToken({ req })
-      if (!jwt) throw new CustomError('Unauthorized', { status: 401 })
+      let jwt: JWT | null = { sub: 'fake' }
+      if (process.env.INSECURE_DISABLE_AUTH !== 'yes_im_sure') {
+        jwt = await getToken({ req })
+        if (!jwt) throw new CustomError('Unauthorized', { status: 401 })
+      }
 
       await handler({ req, res, jwt })
     } catch (error: any) {
