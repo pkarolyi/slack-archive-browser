@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prisma:reset": "prisma migrate reset --force",
-    "archive:import": "ts-node scripts/archive_to_db.ts ./archive",
-    "archive:import:test": "ts-node scripts/archive_to_db.ts ./archive export-test"
+    "archive:import": "ts-node scripts/archive_to_db.ts ./archive"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.5",

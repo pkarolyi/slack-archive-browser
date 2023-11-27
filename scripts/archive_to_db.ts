@@ -14,6 +14,7 @@ const ARCHIVE_DIR = path.join(process.cwd(), process.argv[2])
 const ONLY = process.argv[3] || null
 
 type JSONChannel = { id: string; name: string }
+
 type JSONUser = {
   id: string
   name: string
@@ -99,68 +100,64 @@ async function main() {
       .readdirSync(channelDir)
       .map((f) => path.join(channelDir, f))
 
+    const messages: JSONMessage[] = []
     for (const file of files) {
       console.log(`  importing ${file}...`)
-      const messages: JSONMessage[] = JSON.parse(
-        fs.readFileSync(file).toString()
+      messages.push(...JSON.parse(fs.readFileSync(file).toString()))
+    }
+
+    console.log(`Processing ${channel.name}...`)
+
+    const normalMessages: Message[] = []
+    const threadMessages: ThreadMessage[] = []
+
+    for (const m of messages) {
+      // m.ts bc of random shit like `canvas_in_the_conversation.json`
+      if (m.ts) {
+        if (!m.user) {
+          m.user = 'NO_ID'
+        } else if (!users.find((u) => u.id === m.user)) {
+          m.user = 'UNKNOWN_ID'
+        }
+
+        if (m.parent_user_id && m.thread_ts && !m.reply_count)
+          threadMessages.push({ ...m, id: randomUUID() } as ThreadMessage)
+        else normalMessages.push({ ...m, id: randomUUID() } as Message)
+      }
+    }
+
+    await prisma.archiveMessage.createMany({
+      data: normalMessages.map((m) => ({
+        id: m.id,
+        ts: m.ts,
+        text: m.text || '',
+        channelId: channel.id,
+        userId: m.user,
+        isThread: m.thread_ts && m.reply_count ? true : false,
+      })),
+    })
+
+    const threadRootMessages = await prisma.archiveMessage.findMany({
+      where: { isThread: true },
+    })
+
+    const threadMessagesWithParents = threadMessages.map((m) => {
+      const parentMessage = threadRootMessages.find(
+        (rm) => rm.ts === m.thread_ts
       )
 
-      const normalMessages: Message[] = []
-      const threadMessages: ThreadMessage[] = []
-
-      for (const m of messages) {
-        // m.ts bc of random shit like `canvas_in_the_conversation.json`
-        if (m.ts) {
-          if (!m.user) {
-            m.user = 'NO_ID'
-          } else if (!users.find((u) => u.id === m.user)) {
-            m.user = 'UNKNOWN_ID'
-          }
-
-          if (m.parent_user_id && m.thread_ts && !m.reply_count)
-            threadMessages.push({ ...m, id: randomUUID() } as ThreadMessage)
-          else normalMessages.push({ ...m, id: randomUUID() } as Message)
-        }
+      return {
+        id: m.id,
+        ts: m.ts,
+        text: m.text || '',
+        parentId: parentMessage!.id,
+        userId: m.user,
       }
+    })
 
-      await prisma.archiveMessage.createMany({
-        data: normalMessages.map((m) => ({
-          id: m.id,
-          ts: m.ts,
-          text: m.text || '',
-          channelId: channel.id,
-          userId: m.user,
-          isThread: m.thread_ts && m.reply_count ? true : false,
-        })),
-      })
-
-      const threadRootMessages = await prisma.archiveMessage.findMany({
-        where: { isThread: true },
-      })
-
-      const threadMessagesWithParents = threadMessages.map((m) => {
-        const parentMessage = threadRootMessages.find(
-          (rm) => rm.ts === m.thread_ts
-        )
-
-        if (!parentMessage) {
-          console.error(m)
-          throw new Error('Fix')
-        }
-
-        return {
-          id: m.id,
-          ts: m.ts,
-          text: m.text || '',
-          parentId: parentMessage!.id,
-          userId: m.user,
-        }
-      })
-
-      await prisma.archiveThreadMessage.createMany({
-        data: threadMessagesWithParents,
-      })
-    }
+    await prisma.archiveThreadMessage.createMany({
+      data: threadMessagesWithParents,
+    })
   }
 }
 
