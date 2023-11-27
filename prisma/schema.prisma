@@ -7,41 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Authentication, see https://next-auth.js.org/adapters/prisma
-
-model Account {
-  id                String   @id @default(uuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?  @db.Text
-  access_token      String?  @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?  @db.Text
-  session_state     String?
-  ok                Boolean?
-  state             String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model User {
-  id            String    @id @default(uuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-
-  accounts Account[]
-}
-
-// end auth
-
 model ArchiveUser {
   id       String  @id // slack id
   name     String
@@ -71,7 +36,7 @@ model ArchiveMessage {
 
   ArchiveThreadMessage ArchiveThreadMessage[]
 
-  @@unique([channelId, userId, ts])
+  @@unique([channelId, ts])
 }
 
 model ArchiveThreadMessage {
@@ -84,5 +49,5 @@ model ArchiveThreadMessage {
   user   ArchiveUser    @relation(fields: [userId], references: [id])
   parent ArchiveMessage @relation(fields: [parentId], references: [id])
 
-  @@unique([parentId, userId, ts])
+  @@unique([parentId, ts])
 }
