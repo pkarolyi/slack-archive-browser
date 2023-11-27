@@ -18,7 +18,7 @@ export default function Home() {
         <nav>
           {channels?.map((c) => (
             <p key={c.id}>
-              <Link href={`/channel/${c.id}`}> {c.name}</Link>
+              <Link href={`/channel/${c.name}`}>{c.name}</Link>
             </p>
           ))}
         </nav>

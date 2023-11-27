@@ -9,22 +9,22 @@ import useSWRInfinite from 'swr/infinite'
 
 export default function Channel() {
   const router = useRouter()
-  const { id } = router.query
+  const { name } = router.query
 
   const getKey = useCallback(
     (id: any) =>
       (pageIndex: number, previousPageData: ArchiveMessage[] | null) => {
-        if (!previousPageData) return `/api/message/${id}?count=1000`
+        if (!previousPageData) return `/api/message/${id}?count=50`
         if (previousPageData && previousPageData.length === 0) return null
-        return `/api/message/${id}?before=${
+        return `/api/message/${id}?from=${
           previousPageData[previousPageData.length - 1].ts
-        }&count=1000`
+        }&count=10`
       },
-    [id]
+    [name]
   )
 
   const { data, size, setSize } = useSWRInfinite<ArchiveMessage[]>(
-    getKey(id),
+    getKey(name),
     fetcher
   )
 
@@ -39,15 +39,25 @@ export default function Channel() {
       <main className={styles.main}>
         {data.map((messages) =>
           messages?.map((m) => (
-            <div key={m.id}>
-              <p>
-                [{DateTime.fromSeconds(parseFloat(m.ts)).toFormat('D TT')}] &lt;
-                <strong>{m.name}</strong>&gt;: <span>{m.text}</span>
-              </p>
+            <div key={m.id} className={styles.message}>
+              <div className={styles.message_head}>
+                <span className={styles.name}>{m.name}</span>
+                <span className={styles.ts}>
+                  [{DateTime.fromSeconds(parseFloat(m.ts)).toFormat('D TT')}]
+                </span>
+              </div>
+              <div className={styles.message_body}>
+                <span className={styles.text}>{m.text}</span>
+              </div>
             </div>
           ))
         )}
-        <button onClick={() => setSize(size + 1)}>Load More</button>
+        <button
+          className={styles.load_more}
+          onClick={() => setSize((size) => size + 1)}
+        >
+          Load more
+        </button>
       </main>
     </div>
   )

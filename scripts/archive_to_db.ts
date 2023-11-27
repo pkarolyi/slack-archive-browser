@@ -33,7 +33,8 @@ async function main() {
       const strippedMessages = messages.map((m: any) => ({
         ts: m.ts,
         text: m.text || '',
-        name: m.user_profile?.name || m.user || '',
+        name:
+          m.user_profile?.display_name || m.user_profile?.name || m.user || '',
         channelId,
       }))
       await prisma.archiveMessage.createMany({ data: strippedMessages })

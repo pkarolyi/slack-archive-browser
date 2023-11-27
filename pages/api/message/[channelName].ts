@@ -4,31 +4,38 @@ import { prisma } from '@lib/prisma'
 
 async function getMessages({ req, res, jwt }: AuthorizedApiHandlerParams) {
   const {
-    query: { channelId, before, count },
+    query: { channelName, from, count },
   }: any = req
 
-  if (!channelId) {
-    throw new CustomError('channelId is required', {
+  if (!channelName)
+    throw new CustomError('channelName is required', {
       status: 400,
     })
-  }
 
   const take = parseInt(count) || 100
+  const channel = await prisma.archiveChannel.findUnique({
+    where: { name: channelName },
+  })
 
-  if (before) {
+  if (!channel)
+    throw new CustomError(`Channel ${channelName} does not exist`, {
+      status: 400,
+    })
+
+  if (from) {
     const messages = await prisma.archiveMessage.findMany({
       take,
       skip: 1,
       cursor: {
         channelId_ts: {
-          channelId,
-          ts: before,
+          channelId: channel.id,
+          ts: from,
         },
       },
       orderBy: {
-        ts: 'desc',
+        ts: 'asc',
       },
-      where: { channelId },
+      where: { channelId: channel.id },
     })
 
     return res.status(200).json(messages)
@@ -36,9 +43,9 @@ async function getMessages({ req, res, jwt }: AuthorizedApiHandlerParams) {
     const messages = await prisma.archiveMessage.findMany({
       take,
       orderBy: {
-        ts: 'desc',
+        ts: 'asc',
       },
-      where: { channelId },
+      where: { channelId: channel.id },
     })
 
     return res.status(200).json(messages)
