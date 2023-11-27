@@ -10,7 +10,7 @@ datasource db {
 // Authentication, see https://next-auth.js.org/adapters/prisma
 
 model Account {
-  id                String   @id @default(cuid())
+  id                String   @id @default(uuid())
   userId            String
   type              String
   provider          String
@@ -31,30 +31,58 @@ model Account {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(uuid())
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  accounts      Account[]
+
+  accounts Account[]
 }
 
 // end auth
 
+model ArchiveUser {
+  id       String  @id // slack id
+  name     String
+  imageUrl String?
+
+  ArchiveMessage       ArchiveMessage[]
+  ArchiveThreadMessage ArchiveThreadMessage[]
+}
+
 model ArchiveChannel {
-  id             String           @id @default(cuid())
-  name           String           @unique
+  id   String @id // slack id
+  name String @unique
+
   ArchiveMessage ArchiveMessage[]
 }
 
 model ArchiveMessage {
-  id        String @id @default(cuid())
+  id        String  @id // no slack id for messages
   ts        String
   text      String
-  name      String
   channelId String
+  userId    String
+  isThread  Boolean @default(false)
 
+  user    ArchiveUser    @relation(fields: [userId], references: [id])
   channel ArchiveChannel @relation(fields: [channelId], references: [id])
 
-  @@unique([channelId, ts])
+  ArchiveThreadMessage ArchiveThreadMessage[]
+
+  @@unique([channelId, userId, ts])
+}
+
+model ArchiveThreadMessage {
+  id       String @id // no slack id for messages
+  ts       String
+  text     String
+  userId   String
+  parentId String
+
+  user   ArchiveUser    @relation(fields: [userId], references: [id])
+  parent ArchiveMessage @relation(fields: [parentId], references: [id])
+
+  @@unique([parentId, userId, ts])
 }
