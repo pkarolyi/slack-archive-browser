@@ -10,22 +10,24 @@ export default async function Channels({
   };
   searchParams: {
     search?: string;
-    take?: string;
-    skip?: string;
+    page?: string;
+    size?: string;
   };
 }) {
+  const channelId = params.segments?.[0];
+
   return (
     <main className="h-screen flex p-2 bg-gradient-to-br from-cyan-800 to-yellow-800">
       <div className="h-full overflow-y-scroll overflow-x-hidden py-2 px-4 w-1/4 backdrop-brightness-50 rounded-l-md">
-        <ChannelSelector />
+        <ChannelSelector activeChannel={channelId} />
       </div>
-      <div className="h-full w-full py-2 px-4 bg-slate-50 rounded-r-md">
-        {params.segments?.[0] && (
+      <div className="h-full w-3/4 bg-slate-50 rounded-r-md break-words">
+        {channelId && (
           <Messages
-            channelId={params.segments[0]}
+            channelId={channelId}
             search={searchParams.search}
-            take={searchParams.take ? parseInt(searchParams.take) : undefined}
-            skip={searchParams.skip ? parseInt(searchParams.skip) : undefined}
+            page={searchParams.page ? parseInt(searchParams.page) : undefined}
+            size={searchParams.size ? parseInt(searchParams.size) : undefined}
           />
         )}
       </div>

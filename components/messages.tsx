@@ -1,27 +1,33 @@
 /* eslint-disable @next/next/no-img-element */
+import Paginator from "./paginator";
 import Timestamp from "./timestamp";
-import { getChannelName, getMessages } from "@/lib/data";
+import { getChannelName, getMessages, getMessagesCount } from "@/lib/data";
 
 export default async function Messages({
   channelId,
   search,
-  take,
-  skip,
+  page = 1,
+  size = 100,
 }: {
   channelId: string;
   search?: string;
-  take?: number;
-  skip?: number;
+  page?: number;
+  size?: number;
 }) {
-  const messages = await getMessages({ channelId, search, take, skip });
+  const skip = (page - 1) * size;
+  const messages = await getMessages({ channelId, search, take: size, skip });
+  const totalMessages = await getMessagesCount({ channelId, search });
   const channelName = await getChannelName({ id: channelId });
 
   return (
     <div className="h-full flex flex-col">
-      <div className="text-2xl text-slate-900 font-bold mb-2 h-8">
-        # {channelName}
+      <div className="p-4 border-b border-slate-400 flex justify-between">
+        <div className="text-2xl text-slate-900 font-bold h-8">
+          # {channelName}
+        </div>
+        <Paginator pageCount={Math.ceil(totalMessages / size)} />
       </div>
-      <div className="h-full overflow-y-scroll overflow-x-hidden">
+      <div className="h-full overflow-y-scroll overflow-x-hidden px-4 py-2">
         {messages.map((message) => (
           <div
             key={message.id}

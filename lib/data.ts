@@ -10,6 +10,18 @@ export async function getChannelName({ id }: { id: string }) {
   return channel?.name;
 }
 
+function buildMessageSearchQuery(search?: string) {
+  if (!search) return null;
+
+  return {
+    OR: [
+      { text: { contains: search } },
+      { user: { name: { contains: search } } },
+      { threadMessages: { some: { text: { contains: search } } } },
+    ],
+  };
+}
+
 export async function getMessages({
   channelId,
   skip,
@@ -17,27 +29,34 @@ export async function getMessages({
   search,
 }: {
   channelId: string;
-  skip?: number;
-  take?: number;
+  skip: number;
+  take: number;
   search?: string;
 }) {
-  const searchQuery = search
-    ? {
-        OR: [
-          { text: { contains: search } },
-          { user: { name: { contains: search } } },
-          { threadMessages: { some: { text: { contains: search } } } },
-        ],
-      }
-    : null;
+  const searchQuery = buildMessageSearchQuery(search);
 
   const messages = await prisma.archiveMessage.findMany({
-    take: take ?? 100,
-    skip: skip ?? 0,
+    take: take,
+    skip: skip,
     orderBy: { ts: "asc" },
     include: { user: true, threadMessages: true },
     where: { channelId: channelId, ...searchQuery },
   });
 
   return messages;
+}
+export async function getMessagesCount({
+  channelId,
+  search,
+}: {
+  channelId: string;
+  search?: string;
+}) {
+  const searchQuery = buildMessageSearchQuery(search);
+
+  const messageCount = await prisma.archiveMessage.count({
+    where: { channelId: channelId, ...searchQuery },
+  });
+
+  return messageCount;
 }
