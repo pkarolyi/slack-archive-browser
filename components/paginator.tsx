@@ -42,8 +42,8 @@ export default function Paginator({ pageCount }: { pageCount: number }) {
   const currentPage = parseInt(searchParams.get("page") || "1");
 
   const middleComponents = Array.from(
-    { length: 7 },
-    (_, i) => currentPage - 3 + i
+    { length: 5 },
+    (_, i) => currentPage - 2 + i
   ).filter((c) => c > 1 && c < pageCount);
 
   return (
@@ -61,7 +61,7 @@ export default function Paginator({ pageCount }: { pageCount: number }) {
         {middleComponents[middleComponents.length - 1] < pageCount - 1 && (
           <PaginationLink text="..." />
         )}
-        <PaginationLink page={pageCount} />
+        {pageCount > 1 && <PaginationLink page={pageCount} />}
         <PaginationLink
           page={currentPage + 1 < pageCount ? currentPage + 1 : undefined}
           text=">"

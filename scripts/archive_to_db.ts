@@ -109,6 +109,7 @@ async function main() {
       data: normalMessages.map((m) => ({
         id: m.id,
         ts: m.ts,
+        isoDate: new Date(m.ts.split(".")[0] * 1000).toISOString(),
         text: m.text || "",
         channelId: channel.id,
         userId: m.user,
@@ -129,6 +130,7 @@ async function main() {
         return {
           id: m.id,
           ts: m.ts,
+          isoDate: new Date(m.ts.split(".")[0] * 1000).toISOString(),
           text: m.text || "",
           parentId: parentMessage?.id,
           userId: m.user,

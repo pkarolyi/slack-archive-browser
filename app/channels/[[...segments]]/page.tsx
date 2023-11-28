@@ -18,7 +18,7 @@ export default async function Channels({
 
   return (
     <main className="h-screen flex p-2 bg-gradient-to-br from-cyan-800 to-yellow-800">
-      <div className="h-full overflow-y-scroll overflow-x-hidden py-2 px-4 w-1/4 backdrop-brightness-50 rounded-l-md">
+      <div className="h-full w-1/4 backdrop-brightness-50 rounded-l-md">
         <ChannelSelector activeChannel={channelId} />
       </div>
       <div className="h-full w-3/4 bg-slate-50 rounded-r-md break-words">

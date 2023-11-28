@@ -26,6 +26,7 @@ model ArchiveChannel {
 model ArchiveMessage {
   id        String  @id // no slack id for messages
   ts        String
+  isoDate   String
   text      String
   channelId String
   userId    String
@@ -42,6 +43,7 @@ model ArchiveMessage {
 model ArchiveThreadMessage {
   id       String @id // no slack id for messages
   ts       String
+  isoDate  String
   text     String
   userId   String
   parentId String

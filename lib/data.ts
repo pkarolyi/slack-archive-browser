@@ -16,6 +16,7 @@ function buildMessageSearchQuery(search?: string) {
   return {
     OR: [
       { text: { contains: search } },
+      { isoDate: { contains: search } },
       { user: { name: { contains: search } } },
       { threadMessages: { some: { text: { contains: search } } } },
     ],

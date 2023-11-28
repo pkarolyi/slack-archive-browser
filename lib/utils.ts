@@ -1,9 +1,3 @@
-export function dateFromSlackTs(ts: string) {
-  const tsWithoutSequence = parseInt(ts.split(".")[0]);
-  const date = new Date(tsWithoutSequence * 1000);
-  return date;
-}
-
 export function createURLWithSearchParams(
   pathname: string,
   searchParams: URLSearchParams,
@@ -11,7 +5,11 @@ export function createURLWithSearchParams(
 ) {
   const params = new URLSearchParams(searchParams);
   for (const [key, value] of Object.entries(newSearchParams)) {
-    params.set(key, value.toString());
+    if (value) {
+      params.set(key, value.toString());
+    } else {
+      params.delete(key);
+    }
   }
 
   return `${pathname}?${params.toString()}`;
