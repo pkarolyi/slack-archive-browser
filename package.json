@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "db:reset": "prisma migrate reset",
     "archive:import": "tsx scripts/archive_to_db.ts .archive"
   },
   "dependencies": {

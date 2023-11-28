@@ -5,6 +5,11 @@ export async function getChannels() {
   return channels;
 }
 
+export async function getChannelName({ id }: { id: string }) {
+  const channel = await prisma.archiveChannel.findUnique({ where: { id } });
+  return channel?.name;
+}
+
 export async function getMessages({
   channelId,
   skip,
@@ -12,8 +17,8 @@ export async function getMessages({
   search,
 }: {
   channelId: string;
-  skip: number;
-  take: number;
+  skip?: number;
+  take?: number;
   search?: string;
 }) {
   const searchQuery = search
@@ -27,8 +32,8 @@ export async function getMessages({
     : null;
 
   const messages = await prisma.archiveMessage.findMany({
-    take: take,
-    skip: skip,
+    take: take ?? 100,
+    skip: skip ?? 0,
     orderBy: { ts: "asc" },
     include: { user: true, threadMessages: true },
     where: { channelId: channelId, ...searchQuery },

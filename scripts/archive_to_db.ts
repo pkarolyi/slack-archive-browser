@@ -82,7 +82,10 @@ async function main() {
       if (m.ts) {
         if (!m.user) {
           m.user = "NO_ID";
-        } else if (!users.find((u) => u.id === m.user)) {
+        } else if (
+          m.user !== "USLACKBOT" &&
+          !users.find((u) => u.id === m.user)
+        ) {
           m.user = "UNKNOWN_ID";
         }
 
