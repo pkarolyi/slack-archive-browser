@@ -12,15 +12,15 @@ model ArchiveUser {
   name     String
   imageUrl String?
 
-  ArchiveMessage       ArchiveMessage[]
-  ArchiveThreadMessage ArchiveThreadMessage[]
+  messages       ArchiveMessage[]
+  threadMessages ArchiveThreadMessage[]
 }
 
 model ArchiveChannel {
   id   String @id // slack id
   name String @unique
 
-  ArchiveMessage ArchiveMessage[]
+  messages ArchiveMessage[]
 }
 
 model ArchiveMessage {
@@ -34,7 +34,7 @@ model ArchiveMessage {
   user    ArchiveUser    @relation(fields: [userId], references: [id])
   channel ArchiveChannel @relation(fields: [channelId], references: [id])
 
-  ArchiveThreadMessage ArchiveThreadMessage[]
+  threadMessages ArchiveThreadMessage[]
 
   @@unique([channelId, ts])
 }

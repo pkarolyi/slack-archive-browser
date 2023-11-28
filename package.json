@@ -1,13 +1,13 @@
 {
   "name": "cppftw-archive",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "archive:import": "tsx scripts/archive_to_db.ts archive"
+    "archive:import": "tsx scripts/archive_to_db.ts .archive"
   },
   "dependencies": {
     "@prisma/client": "^5.6.0",

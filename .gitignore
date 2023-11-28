@@ -36,4 +36,7 @@ yarn-error.log*
 next-env.d.ts
 
 # slack exported archive
-archive
+.archive
+
+# local db data
+.postgres-data

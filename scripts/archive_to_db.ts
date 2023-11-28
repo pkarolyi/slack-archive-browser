@@ -14,6 +14,7 @@ const ARCHIVE_DIR = path.join(process.cwd(), process.argv[2]);
 const ONLY = process.argv[3] || null;
 
 async function main() {
+  console.log("Importing users...");
   const users: any[] = JSON.parse(
     fs.readFileSync(path.join(ARCHIVE_DIR, "users.json"), "utf-8")
   );
@@ -48,6 +49,7 @@ async function main() {
     },
   });
 
+  console.log("Importing channels...");
   const channels: any[] = JSON.parse(
     fs.readFileSync(path.join(ARCHIVE_DIR, "channels.json"), "utf-8")
   ).filter((ch: any) => (ONLY ? ch.name === ONLY : true));
