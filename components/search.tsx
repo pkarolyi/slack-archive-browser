@@ -13,6 +13,7 @@ export default function SearchBox() {
   const handleSearch = useDebouncedCallback((term) => {
     const newURL = createURLWithSearchParams(pathname, searchParams, {
       search: term,
+      page: null,
     });
     router.replace(newURL);
   }, 300);
