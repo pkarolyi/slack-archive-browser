@@ -15,7 +15,7 @@ export default function SearchBox() {
       search: term,
       page: null,
     });
-    router.replace(newURL);
+    router.push(newURL);
   }, 300);
 
   return (

@@ -58,7 +58,11 @@ async function main() {
     console.log(`Importing ${channel.name}...`);
 
     await prisma.archiveChannel.create({
-      data: { name: channel.name, id: channel.id },
+      data: {
+        name: channel.name,
+        id: channel.id,
+        isGeneral: channel.is_general,
+      },
     });
 
     const channelDir = path.join(ARCHIVE_DIR, channel.name);

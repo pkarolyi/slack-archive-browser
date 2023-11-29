@@ -16,7 +16,6 @@ export const authConfig = {
   ],
   callbacks: {
     signIn(params: any) {
-      console.log(params);
       const teamId: any = params?.profile?.["https://slack.com/team_id"];
       return teamId === process.env.SLACK_TEAM_ID!;
     },

@@ -2,7 +2,7 @@ import { getChannels } from "@/lib/data";
 import clsx from "clsx";
 import Link from "next/link";
 
-export default async function ChannelSelector({
+export default async function Channels({
   activeChannel,
 }: {
   activeChannel?: string;

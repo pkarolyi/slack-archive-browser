@@ -5,6 +5,13 @@ export async function getChannels() {
   return channels;
 }
 
+export async function getChannelGeneral() {
+  const channel = await prisma.archiveChannel.findFirstOrThrow({
+    where: { isGeneral: true },
+  });
+  return channel;
+}
+
 export async function getChannelName({ id }: { id: string }) {
   const channel = await prisma.archiveChannel.findUnique({ where: { id } });
   return channel?.name;

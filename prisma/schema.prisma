@@ -18,8 +18,9 @@ model ArchiveUser {
 }
 
 model ArchiveChannel {
-  id   String @id // slack id
-  name String @unique
+  id        String  @id // slack id
+  name      String  @unique
+  isGeneral Boolean
 
   messages ArchiveMessage[]
 }

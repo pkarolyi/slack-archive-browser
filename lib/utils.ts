@@ -12,5 +12,7 @@ export function createURLWithSearchParams(
     }
   }
 
+  if (params.size === 0) return pathname;
+
   return `${pathname}?${params.toString()}`;
 }
