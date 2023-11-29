@@ -17,6 +17,13 @@ export async function getChannelName({ id }: { id: string }) {
   return channel?.name;
 }
 
+export async function getLatestMessageIsoDate() {
+  const latestMessage = await prisma.archiveMessage.findFirstOrThrow({
+    orderBy: { ts: "desc" },
+  });
+  return latestMessage.isoDate;
+}
+
 function buildMessageSearchQuery(search?: string) {
   if (!search) return null;
 

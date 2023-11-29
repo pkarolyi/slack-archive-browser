@@ -16,8 +16,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+  const authDisabled =
+    process.env.NODE_ENV === "development" &&
+    process.env.INSECURE_DISABLE_AUTH === "yes_im_sure";
 
-  if (!session) redirect("/api/auth/signin");
+  if (!authDisabled && !session) redirect("/api/auth/signin");
   else
     return (
       <html lang="en">
