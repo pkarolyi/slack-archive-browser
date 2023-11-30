@@ -1,5 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
-
+import Image from "next/image";
 import Timestamp from "./timestamp";
 
 export default function Message({
@@ -18,10 +17,12 @@ export default function Message({
       <div className="flex flex-row items-start gap-2">
         {userImageUrl && (
           <div className="mt-1 flex-none">
-            <img
+            <Image
               alt={`Profile picture of ${userName}`}
               src={userImageUrl}
               className="rounded-md h-[42px] w-[42px]"
+              width={42}
+              height={42}
             />
           </div>
         )}
