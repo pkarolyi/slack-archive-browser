@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { ArchiveMessageType } from "@prisma/client";
 
 export async function getChannels() {
   const channels = await prisma.archiveChannel.findMany();
@@ -32,12 +33,18 @@ function buildMessageSearchQuery(search?: string) {
       { text: { contains: search } },
       { isoDate: { contains: search } },
       { user: { name: { contains: search } } },
-      { threadMessages: { some: { text: { contains: search } } } },
     ],
   };
 }
 
-export async function getMessages({
+const onlyToplevelMessages = {
+  OR: [
+    { type: ArchiveMessageType.NORMAL },
+    { type: ArchiveMessageType.THREAD_PARENT },
+  ],
+};
+
+export async function getChannelMessages({
   channelId,
   skip,
   take,
@@ -54,13 +61,17 @@ export async function getMessages({
     take: take,
     skip: skip,
     orderBy: { ts: "asc" },
-    include: { user: true, threadMessages: true },
-    where: { channelId: channelId, ...searchQuery },
+    include: { user: true },
+    where: {
+      channelId: channelId,
+      ...onlyToplevelMessages,
+      ...searchQuery,
+    },
   });
 
   return messages;
 }
-export async function getMessagesCount({
+export async function getChannelMessagesCount({
   channelId,
   search,
 }: {
@@ -70,8 +81,17 @@ export async function getMessagesCount({
   const searchQuery = buildMessageSearchQuery(search);
 
   const messageCount = await prisma.archiveMessage.count({
-    where: { channelId: channelId, ...searchQuery },
+    where: { channelId: channelId, ...onlyToplevelMessages, ...searchQuery },
   });
 
   return messageCount;
+}
+
+export async function getThreadReplies({ messageId }: { messageId: string }) {
+  const replies = await prisma.archiveMessage.findMany({
+    orderBy: { ts: "asc" },
+    include: { user: true },
+    where: { parentId: messageId },
+  });
+  return replies;
 }

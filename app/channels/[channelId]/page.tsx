@@ -2,7 +2,7 @@ import Messages from "@/components/messages";
 import MessagesSkeleton from "@/components/messages_skeleton";
 import Paginator from "@/components/paginator";
 import SearchBox from "@/components/search";
-import { getChannelName, getMessagesCount } from "@/lib/data";
+import { getChannelName, getChannelMessagesCount } from "@/lib/data";
 import { Suspense } from "react";
 
 export default async function Channel({
@@ -23,7 +23,7 @@ export default async function Channel({
   const page = Number(searchParams.page) || 1;
   const size = Number(searchParams.size) || 100;
 
-  const totalMessages = await getMessagesCount({ channelId, search });
+  const totalMessages = await getChannelMessagesCount({ channelId, search });
   const channelName = await getChannelName({ id: channelId });
 
   return (

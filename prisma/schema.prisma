@@ -9,49 +9,38 @@ datasource db {
 }
 
 model ArchiveUser {
-  id       String  @id // slack id
+  id       String  @id
   name     String
   imageUrl String?
 
-  messages       ArchiveMessage[]
-  threadMessages ArchiveThreadMessage[]
+  messages ArchiveMessage[]
 }
 
 model ArchiveChannel {
-  id        String  @id // slack id
+  id        String  @id
   name      String  @unique
   isGeneral Boolean
 
   messages ArchiveMessage[]
 }
 
+enum ArchiveMessageType {
+  NORMAL
+  THREAD_PARENT
+  THREAD_CHILD
+  THREAD_CHILD_BROADCAST
+}
+
 model ArchiveMessage {
-  id        String  @id // no slack id for messages
+  id        String             @id
   ts        String
   isoDate   String
   text      String
+  type      ArchiveMessageType
   channelId String
   userId    String
-  isThread  Boolean @default(false)
+  parentId  String?
 
   user    ArchiveUser    @relation(fields: [userId], references: [id])
   channel ArchiveChannel @relation(fields: [channelId], references: [id])
-
-  threadMessages ArchiveThreadMessage[]
-
-  @@unique([channelId, ts])
-}
-
-model ArchiveThreadMessage {
-  id       String @id // no slack id for messages
-  ts       String
-  isoDate  String
-  text     String
-  userId   String
-  parentId String
-
-  user   ArchiveUser    @relation(fields: [userId], references: [id])
-  parent ArchiveMessage @relation(fields: [parentId], references: [id])
-
-  @@unique([parentId, ts])
 }
