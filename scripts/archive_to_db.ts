@@ -1,7 +1,7 @@
-import { ArchiveMessageType, PrismaClient } from "@prisma/client";
-import path from "path";
-import fs from "fs";
+import { MessageType, PrismaClient } from "@prisma/client";
 import { randomUUID } from "crypto";
+import fs from "fs";
+import path from "path";
 
 console.log(
   "Assuming clean database. If you have previous messages loaded reset the database!"
@@ -15,7 +15,7 @@ const ONLY = process.argv[3] || null;
 
 async function createUsers(users: any[]) {
   // create user from users.json
-  await prisma.archiveUser.createMany({
+  await prisma.user.createMany({
     data: users.map((u) => ({
       id: u.id,
       name: u.profile.display_name || u.name,
@@ -24,20 +24,20 @@ async function createUsers(users: any[]) {
   });
 
   // create special users
-  await prisma.archiveUser.create({
+  await prisma.user.create({
     data: {
       id: "USLACKBOT",
       name: "Slackbot",
       imageUrl: "https://a.slack-edge.com/80588/img/slackbot_72.png",
     },
   });
-  await prisma.archiveUser.create({
+  await prisma.user.create({
     data: {
       id: "NO_ID",
       name: "[some_bot]",
     },
   });
-  await prisma.archiveUser.create({
+  await prisma.user.create({
     data: {
       id: "UNKNOWN_ID",
       name: "[external_user]",
@@ -75,9 +75,9 @@ async function createMessages(
       // message is in a thread
       if (message.subtype === "thread_broadcast" && message.root) {
         // message is also sent to channel
-        message.type = ArchiveMessageType.THREAD_CHILD_BROADCAST;
+        message.type = MessageType.THREAD_CHILD_BROADCAST;
       } else {
-        message.type = ArchiveMessageType.THREAD_CHILD;
+        message.type = MessageType.THREAD_CHILD;
       }
       // populate parent-searching metadata for child
       childMeta[message.id] = {
@@ -88,11 +88,11 @@ async function createMessages(
       // message is not in a thread
       if (message.thread_ts && message.reply_count) {
         // message has thread replies
-        message.type = ArchiveMessageType.THREAD_PARENT;
+        message.type = MessageType.THREAD_PARENT;
         // speed-up lookup for finding this as a parent
         parentLookup[message.ts] = message.id;
       } else {
-        message.type = ArchiveMessageType.NORMAL;
+        message.type = MessageType.NORMAL;
       }
     }
 
@@ -111,8 +111,8 @@ async function createMessages(
   const finalMessages: any[] = [];
   for (const message of processedMessages) {
     if (
-      message.type === ArchiveMessageType.THREAD_CHILD ||
-      message.type === ArchiveMessageType.THREAD_CHILD_BROADCAST
+      message.type === MessageType.THREAD_CHILD ||
+      message.type === MessageType.THREAD_CHILD_BROADCAST
     ) {
       const meta = childMeta[message.id];
       const parentId = parentLookup[meta.thread_ts];
@@ -127,7 +127,7 @@ async function createMessages(
     finalMessages.push(message);
   }
 
-  await prisma.archiveMessage.createMany({
+  await prisma.message.createMany({
     data: finalMessages,
   });
 }
@@ -136,7 +136,7 @@ async function createChannels(users: any[], channels: any[]) {
   for (const channel of channels) {
     console.log(`  importing ${channel.name}...`);
 
-    await prisma.archiveChannel.create({
+    await prisma.channel.create({
       data: {
         name: channel.name,
         id: channel.id,

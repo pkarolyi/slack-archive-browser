@@ -1,5 +1,3 @@
-import { getChannelMessages } from "@/lib/data";
-import Message from "./message";
 import MessageSkeleton from "./message_skeleton";
 
 export default async function MessagesSkeleton() {

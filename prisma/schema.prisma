@@ -8,39 +8,39 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model ArchiveUser {
+model User {
   id       String  @id
   name     String
   imageUrl String?
 
-  messages ArchiveMessage[]
+  messages Message[]
 }
 
-model ArchiveChannel {
+model Channel {
   id        String  @id
   name      String  @unique
   isGeneral Boolean
 
-  messages ArchiveMessage[]
+  messages Message[]
 }
 
-enum ArchiveMessageType {
+enum MessageType {
   NORMAL
   THREAD_PARENT
   THREAD_CHILD
   THREAD_CHILD_BROADCAST
 }
 
-model ArchiveMessage {
-  id        String             @id
+model Message {
+  id        String      @id
   ts        String
   isoDate   String
   text      String
-  type      ArchiveMessageType
+  type      MessageType
   channelId String
   userId    String
   parentId  String?
 
-  user    ArchiveUser    @relation(fields: [userId], references: [id])
-  channel ArchiveChannel @relation(fields: [channelId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  channel Channel @relation(fields: [channelId], references: [id])
 }

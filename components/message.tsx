@@ -1,7 +1,7 @@
-import { ArchiveMessageType } from "@prisma/client";
+import { getThreadReplies } from "@/lib/data";
+import { MessageType } from "@prisma/client";
 import Image from "next/image";
 import Timestamp from "./timestamp";
-import { getThreadReplies } from "@/lib/data";
 
 export default async function Message({
   id,
@@ -15,11 +15,11 @@ export default async function Message({
   text: string;
   date: string;
   userName: string;
-  type: ArchiveMessageType;
+  type: MessageType;
   userImageUrl: string | null;
 }) {
   const replies =
-    type === ArchiveMessageType.THREAD_PARENT
+    type === MessageType.THREAD_PARENT
       ? await getThreadReplies({ messageId: id })
       : [];
 

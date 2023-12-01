@@ -2,7 +2,7 @@ import Messages from "@/components/messages";
 import MessagesSkeleton from "@/components/messages_skeleton";
 import Paginator from "@/components/paginator";
 import SearchBox from "@/components/search";
-import { getChannelName, getChannelMessagesCount } from "@/lib/data";
+import { getChannelMessagesCount, getChannelName } from "@/lib/data";
 import { Suspense } from "react";
 
 export default async function Channel({

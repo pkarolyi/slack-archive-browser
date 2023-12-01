@@ -1,7 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-
-import Timestamp from "./timestamp";
-
 export default function MessageSkeleton() {
   return (
     <div className="px-2 py-[5px] rounded-md">

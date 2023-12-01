@@ -1,7 +1,7 @@
 "use client";
 
 import { createURLWithSearchParams } from "@/lib/utils";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 
 export default function SearchBox() {
