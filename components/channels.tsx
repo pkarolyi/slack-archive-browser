@@ -17,9 +17,9 @@ export default function Channels({
           <Link key={channel.id} href={`/channels/${channel.id}`}>
             <div
               className={clsx(
-                "text-base text-slate-200 mx-2 px-2 py-1 rounded-md hover:bg-cyan-900 hover:text-slate-50",
+                "text-base text-stone-200 mx-2 px-2 py-1 rounded-md hover:bg-cyan-900 hover:text-stone-50",
                 activeChannel === channel.id &&
-                  "bg-yellow-800 text-slate-50 font-bold"
+                  "bg-yellow-800 text-stone-50 font-bold"
               )}
             >
               # {channel.name}

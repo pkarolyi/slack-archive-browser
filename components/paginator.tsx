@@ -13,8 +13,8 @@ function PaginationLink({ page, text }: { page?: number; text?: string }) {
   return (
     <li
       className={clsx(
-        "block border border-slate-400 first:rounded-l-md -mr-[1px] last:rounded-r-md last:mr-0",
-        currentPage === page && "bg-slate-200"
+        "block h-full border border-stone-400 first:rounded-l-md -mr-[1px] last:rounded-r-md last:mr-0",
+        currentPage === page && "bg-stone-200"
       )}
     >
       <Link
@@ -26,7 +26,7 @@ function PaginationLink({ page, text }: { page?: number; text?: string }) {
       >
         <div
           className={clsx(
-            "px-2 min-w-[2em] text-center p-[0.25em]",
+            "text-center h-full py-[1px] min-w-[1.5em] lg:min-w-[2em] lg:px-2",
             !page && "cursor-default"
           )}
         >
@@ -48,7 +48,7 @@ export default function Paginator({ pageCount }: { pageCount: number }) {
 
   return (
     <nav>
-      <ul className="flex">
+      <ul className="flex h-full">
         <PaginationLink
           page={currentPage - 1 > 0 ? currentPage - 1 : undefined}
           text="<"

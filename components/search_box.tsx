@@ -19,7 +19,7 @@ export default function SearchBox() {
   }, 300);
 
   return (
-    <div className="flex-1 flex items-center rounded-md border border-slate-400 bg-white">
+    <div className="flex-1 flex items-center rounded-md border border-stone-400 bg-white">
       <div className="ml-2">🔍</div>
       <input
         className="px-2 h-full flex-1 rounded-md focus:outline-none"
