@@ -6,7 +6,6 @@ import Paginator from "@/components/paginator";
 import SearchBox from "@/components/search_box";
 import Sidebar from "@/components/sidebar";
 import {
-  getChannelMessages,
   getChannelMessagesCount,
   getChannelName,
   getChannels,
@@ -34,13 +33,12 @@ export default async function ChannelPage({
   const take = Number(searchParams.size) || 100;
   const skip = (page - 1) * take;
 
-  const [channels, latestMessageDate, totalMessages, channelName, messages] =
+  const [channels, latestMessageDate, totalMessages, channelName] =
     await Promise.all([
       getChannels(),
       getLatestMessageIsoDate(),
       getChannelMessagesCount({ channelId, search }),
       getChannelName({ id: channelId }),
-      getChannelMessages({ channelId, search, take, skip }),
     ]);
 
   return (
@@ -73,7 +71,12 @@ export default async function ChannelPage({
             key={`${search}-${page}-${take}`}
             fallback={<MessagesSkeleton />}
           >
-            <Messages messages={messages} />
+            <Messages
+              channelId={channelId}
+              search={search}
+              take={take}
+              skip={skip}
+            />
           </Suspense>
         </Content>
       </div>
