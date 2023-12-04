@@ -1,10 +1,12 @@
 import { Prisma } from "@prisma/client";
 
-const messageWithUser = Prisma.validator<Prisma.MessageDefaultArgs>()({
-  include: { user: true },
+const messageWithUserAndThread = Prisma.validator<Prisma.MessageDefaultArgs>()({
+  include: { user: true, threadReplies: { include: { user: true } } },
 });
 
-export type MessageWithUser = Prisma.MessageGetPayload<typeof messageWithUser>;
+export type MessageWithUserAndThread = Prisma.MessageGetPayload<
+  typeof messageWithUserAndThread
+>;
 
 const channel = Prisma.validator<Prisma.ChannelDefaultArgs>()({});
 

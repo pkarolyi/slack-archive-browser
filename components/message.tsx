@@ -1,8 +1,12 @@
-import { MessageWithUser } from "@/types/prisma";
+import type { MessageWithUserAndThread } from "@/types/prisma";
 import Image from "next/image";
 import Timestamp from "./timestamp";
 
-export default function Message({ message }: { message: MessageWithUser }) {
+export default function Message({
+  message,
+}: {
+  message: MessageWithUserAndThread;
+}) {
   return (
     <div className="px-2 py-1 rounded-md text-stone-800 hover:bg-stone-200">
       <div className="flex flex-row items-start gap-2">
@@ -23,6 +27,13 @@ export default function Message({ message }: { message: MessageWithUser }) {
             <Timestamp date={message.isoDate} />
           </div>
           <p className="text-sm lg:text-base">{message.text}</p>
+          {message.threadReplies &&
+            message.threadReplies.map((reply) => (
+              <Message
+                key={reply.id}
+                message={{ ...reply, threadReplies: [] }}
+              />
+            ))}
         </div>
       </div>
     </div>

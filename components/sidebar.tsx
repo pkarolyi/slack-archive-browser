@@ -1,4 +1,4 @@
-import { Channel } from "@/types/prisma";
+import type { Channel } from "@/types/prisma";
 import Channels from "./channels";
 import Timestamp from "./timestamp";
 

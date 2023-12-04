@@ -1,4 +1,4 @@
-import { Channel } from "@/types/prisma";
+import type { Channel } from "@/types/prisma";
 import clsx from "clsx";
 import Link from "next/link";
 

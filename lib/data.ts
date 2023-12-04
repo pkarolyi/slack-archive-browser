@@ -58,7 +58,7 @@ export async function getChannelMessages({
     take: take,
     skip: skip,
     orderBy: { ts: "asc" },
-    include: { user: true },
+    include: { user: true, threadReplies: { include: { user: true } } },
     where: {
       channelId: channelId,
       ...onlyToplevelMessages,
