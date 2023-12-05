@@ -1,16 +1,17 @@
-import type { Channel } from "@/types/prisma";
-import Channels from "./channels";
-import Timestamp from "./timestamp";
+import { getChannels, getLatestMessageIsoDate } from "@/lib/data";
+import Channels from "./ui/channels";
+import Timestamp from "./ui/timestamp";
 
-export default function Sidebar({
-  channels,
+export default async function Sidebar({
   activeChannel,
-  latestMessageDate,
 }: {
-  channels: Channel[];
   activeChannel?: string;
-  latestMessageDate: string;
 }) {
+  const [channels, latestMessageDate] = await Promise.all([
+    getChannels(),
+    getLatestMessageIsoDate(),
+  ]);
+
   return (
     <div className="h-full backdrop-brightness-50">
       <div className="h-full flex flex-col">

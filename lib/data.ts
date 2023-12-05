@@ -6,13 +6,6 @@ export async function getChannels() {
   return channels;
 }
 
-export async function getChannelGeneral() {
-  const channel = await prisma.channel.findFirstOrThrow({
-    where: { isGeneral: true },
-  });
-  return channel;
-}
-
 export async function getChannelName({ id }: { id: string }) {
   const channel = await prisma.channel.findUnique({ where: { id } });
   return channel?.name;
@@ -82,13 +75,4 @@ export async function getChannelMessagesCount({
   });
 
   return messageCount;
-}
-
-export async function getThreadReplies({ messageId }: { messageId: string }) {
-  const replies = await prisma.message.findMany({
-    orderBy: { ts: "asc" },
-    include: { user: true },
-    where: { parentId: messageId },
-  });
-  return replies;
 }

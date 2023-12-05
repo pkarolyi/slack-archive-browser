@@ -1,5 +1,5 @@
 import { getChannelMessages } from "@/lib/data";
-import Message from "./message";
+import Message from "./ui/message";
 
 export default async function Messages({
   channelId,
