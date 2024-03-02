@@ -16,19 +16,17 @@ export default async function ChannelPage({
     channelId: string;
   };
   searchParams: {
-    search?: string;
     page?: string;
     size?: string;
   };
 }) {
   const channelId = params.channelId;
-  const search = searchParams.search;
   const page = Number(searchParams.page) || 1;
   const take = Number(searchParams.size) || 100;
   const skip = (page - 1) * take;
 
   const [totalMessages, channelName] = await Promise.all([
-    getChannelMessagesCount({ channelId, search }),
+    getChannelMessagesCount({ channelId }),
     getChannelName({ id: channelId }),
   ]);
 
@@ -49,16 +47,8 @@ export default async function ChannelPage({
         <SearchBox />
         <Paginator pageCount={Math.ceil(totalMessages / take)} />
       </ContentHeader>
-      <Suspense
-        key={`${search}-${page}-${take}`}
-        fallback={<MessagesSkeleton />}
-      >
-        <Messages
-          channelId={channelId}
-          search={search}
-          take={take}
-          skip={skip}
-        />
+      <Suspense key={`${page}-${take}`} fallback={<MessagesSkeleton />}>
+        <Messages channelId={channelId} take={take} skip={skip} />
       </Suspense>
     </Content>
   );

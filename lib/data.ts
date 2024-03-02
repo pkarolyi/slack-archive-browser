@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { MessageType } from "@prisma/client";
+import "server-only";
 
 export async function getChannels() {
   const channels = await prisma.channel.findMany();
@@ -18,18 +19,6 @@ export async function getLatestMessageIsoDate() {
   return latestMessage.isoDate;
 }
 
-function buildMessageSearchQuery(search?: string) {
-  if (!search) return null;
-
-  return {
-    OR: [
-      { text: { contains: search } },
-      { isoDate: { contains: search } },
-      { user: { name: { contains: search } } },
-    ],
-  };
-}
-
 const onlyToplevelMessages = {
   OR: [{ type: MessageType.NORMAL }, { type: MessageType.THREAD_PARENT }],
 };
@@ -38,15 +27,11 @@ export async function getChannelMessages({
   channelId,
   skip,
   take,
-  search,
 }: {
   channelId: string;
   skip: number;
   take: number;
-  search?: string;
 }) {
-  const searchQuery = buildMessageSearchQuery(search);
-
   const messages = await prisma.message.findMany({
     take: take,
     skip: skip,
@@ -55,7 +40,6 @@ export async function getChannelMessages({
     where: {
       channelId: channelId,
       ...onlyToplevelMessages,
-      ...searchQuery,
     },
   });
 
@@ -63,16 +47,36 @@ export async function getChannelMessages({
 }
 export async function getChannelMessagesCount({
   channelId,
-  search,
 }: {
   channelId: string;
-  search?: string;
 }) {
-  const searchQuery = buildMessageSearchQuery(search);
-
   const messageCount = await prisma.message.count({
-    where: { channelId: channelId, ...onlyToplevelMessages, ...searchQuery },
+    where: { channelId: channelId, ...onlyToplevelMessages },
   });
 
   return messageCount;
+}
+
+export async function searchMessages({ term }: { term?: string }) {
+  if (!term) return [];
+
+  const messages = await prisma.message.findMany({
+    where: {
+      AND: [
+        {
+          OR: [
+            { text: { contains: term } },
+            { isoDate: { contains: term } },
+            { user: { name: { contains: term } } },
+          ],
+        },
+        onlyToplevelMessages,
+      ],
+    },
+    orderBy: { ts: "asc" },
+    include: { user: true, channel: true },
+    take: 100,
+  });
+
+  return messages;
 }
