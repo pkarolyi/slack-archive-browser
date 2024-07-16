@@ -23,6 +23,37 @@ const onlyToplevelMessages = {
   OR: [{ type: MessageType.NORMAL }, { type: MessageType.THREAD_PARENT }],
 };
 
+// This function returns the page that contains the message with the given ts
+export async function getMessagePageFromTs({
+  channelId,
+  take,
+  ts,
+}: {
+  channelId: string;
+  take: number;
+  ts?: string;
+}) {
+  if (!ts) return 0;
+
+  const message = await prisma.message.findFirst({
+    where: { channelId, ts },
+  });
+
+  if (!message) return 0;
+
+  const messageIndex = await prisma.message.count({
+    where: {
+      channelId,
+      ...onlyToplevelMessages,
+      ts: { lte: message.ts },
+    },
+  });
+
+  const page = Math.ceil(messageIndex / take);
+
+  return page;
+}
+
 export async function getChannelMessages({
   channelId,
   skip,
@@ -33,12 +64,12 @@ export async function getChannelMessages({
   take: number;
 }) {
   const messages = await prisma.message.findMany({
-    take: take,
-    skip: skip,
+    take,
+    skip,
     orderBy: { ts: "asc" },
     include: { user: true, threadReplies: { include: { user: true } } },
     where: {
-      channelId: channelId,
+      channelId,
       ...onlyToplevelMessages,
     },
   });
@@ -51,7 +82,7 @@ export async function getChannelMessagesCount({
   channelId: string;
 }) {
   const messageCount = await prisma.message.count({
-    where: { channelId: channelId, ...onlyToplevelMessages },
+    where: { channelId, ...onlyToplevelMessages },
   });
 
   return messageCount;

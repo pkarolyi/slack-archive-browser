@@ -18,6 +18,7 @@ export default async function ChannelPage({
   searchParams: {
     page?: string;
     size?: string;
+    messageTs?: string;
   };
 }>) {
   const channelId = params.channelId;
@@ -48,7 +49,12 @@ export default async function ChannelPage({
         <Paginator pageCount={Math.ceil(totalMessages / take)} />
       </ContentHeader>
       <Suspense key={`${page}-${take}`} fallback={<MessagesSkeleton />}>
-        <Messages channelId={channelId} take={take} skip={skip} />
+        <Messages
+          channelId={channelId}
+          take={take}
+          skip={skip}
+          highlightedTs={searchParams.messageTs}
+        />
       </Suspense>
     </Content>
   );

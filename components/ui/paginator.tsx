@@ -11,7 +11,7 @@ function PaginationLink({
 }: Readonly<{ page?: number; text?: string }>) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = parseInt(searchParams.get("page") || "1");
+  const currentPage = parseInt(searchParams.get("page") ?? "1", 10);
 
   return (
     <li
@@ -23,7 +23,10 @@ function PaginationLink({
       <Link
         href={
           page
-            ? createURLWithSearchParams(pathname, searchParams, { page })
+            ? createURLWithSearchParams(pathname, searchParams, {
+                page,
+                messageTs: null,
+              })
             : ""
         }
       >
@@ -33,14 +36,16 @@ function PaginationLink({
             !page && "cursor-default",
           )}
         >
-          {text ? text : page}
+          {text ?? page}
         </div>
       </Link>
     </li>
   );
 }
 
-export default function Paginator({ pageCount }: { pageCount: number }) {
+export default function Paginator({
+  pageCount,
+}: Readonly<{ pageCount: number }>) {
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1");
 

@@ -1,14 +1,22 @@
 import type { MessageWithUserAndThread } from "@/types/prisma";
 import Image from "next/image";
 import Timestamp from "./timestamp";
+import clsx from "clsx";
 
 export default function Message({
   message,
+  highlighted = false,
 }: Readonly<{
   message: MessageWithUserAndThread;
+  highlighted?: boolean;
 }>) {
   return (
-    <div className="rounded-md px-2 py-1 text-stone-800 hover:bg-stone-200">
+    <div
+      className={clsx(
+        "rounded-md px-2 py-1 text-stone-800 hover:bg-stone-200",
+        highlighted && "bg-yellow-400 hover:bg-yellow-500",
+      )}
+    >
       <div className="flex flex-row items-start gap-2">
         {message.user.imageUrl && (
           <div className="mt-1 flex-none">
@@ -29,13 +37,9 @@ export default function Message({
           <p className="whitespace-pre-line text-sm lg:text-base">
             {message.text}
           </p>
-          {message.threadReplies &&
-            message.threadReplies.map((reply) => (
-              <Message
-                key={reply.id}
-                message={{ ...reply, threadReplies: [] }}
-              />
-            ))}
+          {message.threadReplies?.map((reply) => (
+            <Message key={reply.id} message={{ ...reply, threadReplies: [] }} />
+          ))}
         </div>
       </div>
     </div>
