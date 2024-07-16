@@ -5,20 +5,22 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-export default function Channels({ channels }: { channels: Channel[] }) {
+export default function Channels({
+  channels,
+}: Readonly<{ channels: Channel[] }>) {
   const { channelId } = useParams();
 
   return (
-    <div className="py-2 h-full overflow-y-scroll overflow-x-hidden">
+    <div className="h-full overflow-x-hidden overflow-y-scroll py-2">
       {channels
-        .sort((a, b) => (a.name < b.name ? -1 : 1))
+        .toSorted((a, b) => (a.name < b.name ? -1 : 1))
         .map((channel) => (
           <Link key={channel.id} href={`/channels/${channel.id}`}>
             <div
               className={clsx(
-                "text-base text-stone-200 mx-2 px-2 py-1 rounded-md hover:bg-cyan-900 hover:text-stone-50",
+                "mx-2 rounded-md px-2 py-1 text-base text-stone-200 hover:bg-cyan-900 hover:text-stone-50",
                 channelId === channel.id &&
-                  "bg-yellow-800 text-stone-50 font-bold"
+                  "bg-yellow-800 font-bold text-stone-50",
               )}
             >
               # {channel.name}

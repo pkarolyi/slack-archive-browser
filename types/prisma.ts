@@ -11,7 +11,7 @@ export type MessageWithUserAndThread = Prisma.MessageGetPayload<
 const messageWithUserAndChannel = Prisma.validator<Prisma.MessageDefaultArgs>()(
   {
     include: { user: true, channel: true },
-  }
+  },
 );
 
 export type MessageWithUserAndChannel = Prisma.MessageGetPayload<

@@ -1,7 +1,9 @@
-export default function Content({ children }: { children?: React.ReactNode }) {
+export default function Content({
+  children,
+}: Readonly<{ children?: React.ReactNode }>) {
   return (
-    <div className="h-full bg-stone-50 lg:rounded-r-md break-words">
-      <div className="h-full flex flex-col">{children}</div>
+    <div className="h-full break-words bg-stone-50 lg:rounded-r-md">
+      <div className="flex h-full flex-col">{children}</div>
     </div>
   );
 }

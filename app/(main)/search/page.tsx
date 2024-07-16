@@ -1,5 +1,5 @@
 import SearchResults from "@/components/search_results";
-import BackButton from "@/components/ui/back_button";
+import BackToButton from "@/components/ui/back_to_button";
 import Content from "@/components/ui/content";
 import ContentHeader from "@/components/ui/content_header";
 import SearchBox from "@/components/ui/search_box";
@@ -7,13 +7,13 @@ import { Suspense } from "react";
 
 export default function SearchPage({
   searchParams,
-}: {
-  searchParams: { term?: string };
-}) {
+}: Readonly<{
+  searchParams: { term?: string; from?: string };
+}>) {
   return (
     <Content>
       <ContentHeader className="!gap-2">
-        <BackButton />
+        <BackToButton />
         <SearchBox />
       </ContentHeader>
       <Suspense key={searchParams.term} fallback={<div>loading...</div>}>

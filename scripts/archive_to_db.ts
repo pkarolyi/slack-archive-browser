@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 
 console.log(
-  "Assuming clean database. If you have previous messages loaded reset the database!"
+  "Assuming clean database. If you have previous messages loaded reset the database!",
 );
 
 const prisma = new PrismaClient({});
@@ -48,7 +48,7 @@ async function createUsers(users: any[]) {
 async function createMessages(
   channelId: string,
   users: any[],
-  messages: any[]
+  messages: any[],
 ) {
   const processedMessages: any[] = [];
   const childMeta: any = {};
@@ -161,14 +161,14 @@ async function createChannels(users: any[], channels: any[]) {
 async function main() {
   console.log("Importing users...");
   const users: any[] = JSON.parse(
-    fs.readFileSync(path.join(ARCHIVE_DIR, "users.json"), "utf-8")
+    fs.readFileSync(path.join(ARCHIVE_DIR, "users.json"), "utf-8"),
   );
 
   await createUsers(users);
 
   console.log("Importing channels...");
   const channels: any[] = JSON.parse(
-    fs.readFileSync(path.join(ARCHIVE_DIR, "channels.json"), "utf-8")
+    fs.readFileSync(path.join(ARCHIVE_DIR, "channels.json"), "utf-8"),
   ).filter((ch: any) => (ONLY ? ch.name === ONLY : true));
 
   await createChannels(users, channels);

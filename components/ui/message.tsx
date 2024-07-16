@@ -4,18 +4,18 @@ import Timestamp from "./timestamp";
 
 export default function Message({
   message,
-}: {
+}: Readonly<{
   message: MessageWithUserAndThread;
-}) {
+}>) {
   return (
-    <div className="px-2 py-1 rounded-md text-stone-800 hover:bg-stone-200">
+    <div className="rounded-md px-2 py-1 text-stone-800 hover:bg-stone-200">
       <div className="flex flex-row items-start gap-2">
         {message.user.imageUrl && (
           <div className="mt-1 flex-none">
             <Image
               alt={`Profile picture of ${message.user.name}`}
               src={message.user.imageUrl}
-              className="rounded-md h-[36px] w-[36px] lg:h-[42px] lg:w-[42px]"
+              className="h-[36px] w-[36px] rounded-md lg:h-[42px] lg:w-[42px]"
               width={42}
               height={42}
             />
@@ -26,7 +26,7 @@ export default function Message({
             <span className="font-bold">{message.user.name}</span>
             <Timestamp date={message.isoDate} />
           </div>
-          <p className="text-sm lg:text-base whitespace-pre-line">
+          <p className="whitespace-pre-line text-sm lg:text-base">
             {message.text}
           </p>
           {message.threadReplies &&

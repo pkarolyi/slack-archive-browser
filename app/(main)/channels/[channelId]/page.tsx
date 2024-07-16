@@ -11,7 +11,7 @@ import { Suspense } from "react";
 export default async function ChannelPage({
   params,
   searchParams,
-}: {
+}: Readonly<{
   params: {
     channelId: string;
   };
@@ -19,7 +19,7 @@ export default async function ChannelPage({
     page?: string;
     size?: string;
   };
-}) {
+}>) {
   const channelId = params.channelId;
   const page = Number(searchParams.page) || 1;
   const take = Number(searchParams.size) || 100;
@@ -33,8 +33,8 @@ export default async function ChannelPage({
   return (
     <Content>
       <ContentHeader>
-        <div className="flex gap-2 justify-between items-start">
-          <div className="text-xl lg:text-2xl text-stone-900 font-bold">
+        <div className="flex items-start justify-between gap-2">
+          <div className="text-xl font-bold text-stone-900 lg:text-2xl">
             # {channelName}
           </div>
           <Link

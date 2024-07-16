@@ -1,7 +1,7 @@
 export function createURLWithSearchParams(
   pathname: string,
   searchParams: URLSearchParams,
-  newSearchParams: { [key: string]: any }
+  newSearchParams: { [key: string]: any },
 ) {
   const params = new URLSearchParams(searchParams);
   for (const [key, value] of Object.entries(newSearchParams)) {

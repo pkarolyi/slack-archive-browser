@@ -9,13 +9,13 @@ export default async function Sidebar() {
   ]);
 
   return (
-    <div className="h-full backdrop-brightness-50 rounded-l-md">
-      <div className="h-full flex flex-col">
-        <div className="text-2xl text-stone-50 font-bold p-4 border-b border-stone-500 h-16">
+    <div className="h-full rounded-l-md backdrop-brightness-50">
+      <div className="flex h-full flex-col">
+        <div className="h-16 border-b border-stone-500 p-4 text-2xl font-bold text-stone-50">
           <h1>CPP FTW</h1>
         </div>
         <Channels channels={channels} />
-        <div className="text-stone-50 text-xs border-t border-stone-500 px-4 py-2">
+        <div className="border-t border-stone-500 px-4 py-2 text-xs text-stone-50">
           Last archived message: <Timestamp date={latestMessageDate} />
         </div>
       </div>

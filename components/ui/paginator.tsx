@@ -5,7 +5,10 @@ import clsx from "clsx";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
-function PaginationLink({ page, text }: { page?: number; text?: string }) {
+function PaginationLink({
+  page,
+  text,
+}: Readonly<{ page?: number; text?: string }>) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1");
@@ -13,8 +16,8 @@ function PaginationLink({ page, text }: { page?: number; text?: string }) {
   return (
     <li
       className={clsx(
-        "block h-full border border-stone-400 first:rounded-l-md -mr-[1px] last:rounded-r-md last:mr-0",
-        currentPage === page && "bg-stone-200"
+        "-mr-[1px] block h-full border border-stone-400 first:rounded-l-md last:mr-0 last:rounded-r-md",
+        currentPage === page && "bg-stone-200",
       )}
     >
       <Link
@@ -26,8 +29,8 @@ function PaginationLink({ page, text }: { page?: number; text?: string }) {
       >
         <div
           className={clsx(
-            "text-center h-full py-[1px] min-w-[1.5em] lg:min-w-[2em] lg:px-2",
-            !page && "cursor-default"
+            "h-full min-w-[1.5em] py-[1px] text-center lg:min-w-[2em] lg:px-2",
+            !page && "cursor-default",
           )}
         >
           {text ? text : page}
@@ -43,7 +46,7 @@ export default function Paginator({ pageCount }: { pageCount: number }) {
 
   const middleComponents = Array.from(
     { length: 5 },
-    (_, i) => currentPage - 2 + i
+    (_, i) => currentPage - 2 + i,
   ).filter((c) => c > 1 && c < pageCount);
 
   return (
