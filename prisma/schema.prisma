@@ -33,16 +33,29 @@ enum MessageType {
 
 model Message {
   id        String      @id
+  channelId String
+  userId    String
+  parentId  String?
   ts        String
   isoDate   String
   text      String
   type      MessageType
-  channelId String
-  userId    String
-  parentId  String?
 
   threadParent  Message?  @relation("message_thread", fields: [parentId], references: [id])
   user          User      @relation(fields: [userId], references: [id])
   channel       Channel   @relation(fields: [channelId], references: [id])
   threadReplies Message[] @relation("message_thread")
+  files         File[]
+}
+
+model File {
+  id        String  @id
+  slackId   String?
+  messageId String
+  mimeType  String?
+  name      String?
+  title     String?
+  url       String?
+
+  message Message @relation(fields: [messageId], references: [id])
 }

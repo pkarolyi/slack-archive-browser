@@ -51,6 +51,7 @@ async function createMessages(
   messages: any[]
 ) {
   const processedMessages: any[] = [];
+  const messagesWithFiles: any[] = [];
   const childMeta: any = {};
   const parentLookup: any = {};
   for (const message of messages) {
@@ -105,6 +106,10 @@ async function createMessages(
       userId: message.user,
       channelId: channelId,
     });
+
+    if (message.files) {
+      messagesWithFiles.push({ id: message.id, files: message.files });
+    }
   }
 
   // for thread messages we need to find their parent
@@ -129,6 +134,31 @@ async function createMessages(
 
   await prisma.message.createMany({
     data: finalMessages,
+  });
+
+  await createFiles(messagesWithFiles);
+}
+
+async function createFiles(messages: any[]) {
+  console.log("    importing files...");
+  const files: any[] = [];
+  for (const message of messages) {
+    for (const file of message.files) {
+      const id = randomUUID();
+      files.push({
+        id,
+        slackId: file.id,
+        messageId: message.id,
+        mimeType: file.mimetype,
+        name: file.name,
+        title: file.title,
+        url: file.url_private,
+      });
+    }
+  }
+
+  await prisma.file.createMany({
+    data: files,
   });
 }
 

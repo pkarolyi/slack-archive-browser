@@ -7,6 +7,7 @@ export default function Message({
 }: {
   message: MessageWithUserAndThread;
 }) {
+  console.log(message);
   return (
     <div className="px-2 py-1 rounded-md text-stone-800 hover:bg-stone-200">
       <div className="flex flex-row items-start gap-2">
