@@ -17,15 +17,13 @@ export default async function Messages({
 
   return (
     <div className="h-full overflow-x-hidden overflow-y-scroll py-1 lg:px-4 lg:py-2">
-      {messages.map((message) => (
-        <>
-          {message.ts === highlightedTs ? (
-            <HighlightedMessage message={message} />
-          ) : (
-            <Message message={message} />
-          )}
-        </>
-      ))}
+      {messages.map((message) => {
+        if (message.ts === highlightedTs) {
+          return <HighlightedMessage key={message.id} message={message} />;
+        } else {
+          return <Message key={message.id} message={message} />;
+        }
+      })}
     </div>
   );
 }
