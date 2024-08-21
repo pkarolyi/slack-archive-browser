@@ -41,8 +41,12 @@ model Message {
   userId    String
   parentId  String?
 
-  threadParent  Message?  @relation("message_thread", fields: [parentId], references: [id])
   user          User      @relation(fields: [userId], references: [id])
   channel       Channel   @relation(fields: [channelId], references: [id])
+  threadParent  Message?  @relation("message_thread", fields: [parentId], references: [id])
   threadReplies Message[] @relation("message_thread")
+
+  @@index([ts])
+  @@index([channelId])
+  @@index([userId])
 }

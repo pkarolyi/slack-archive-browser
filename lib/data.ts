@@ -7,6 +7,13 @@ export async function getChannels() {
   return channels;
 }
 
+export async function getGeneralChannel() {
+  const channel = await prisma.channel.findFirst({
+    where: { isGeneral: true },
+  });
+  return channel;
+}
+
 export async function getChannelName({ id }: { id: string }) {
   const channel = await prisma.channel.findUnique({ where: { id } });
   return channel?.name;
@@ -23,7 +30,6 @@ const onlyToplevelMessages = {
   OR: [{ type: MessageType.NORMAL }, { type: MessageType.THREAD_PARENT }],
 };
 
-// This function returns the page that contains the message with the given ts
 export async function getMessagePageFromTs({
   channelId,
   take,

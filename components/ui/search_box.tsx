@@ -13,13 +13,9 @@ export default function SearchBox() {
   const currentSearch = searchParams.get("term") ?? "";
 
   const [search, setSearch] = useState(currentSearch);
-  const [focused, setFocused] = useState(false);
 
   const handleSearch = useDebouncedCallback((term) => {
-    const newURL = createURLWithSearchParams("/search", searchParams, {
-      term,
-      page: null,
-    });
+    const newURL = `/search?term=${term}`;
     router.push(newURL);
   }, 300);
 
@@ -28,24 +24,18 @@ export default function SearchBox() {
   }, [currentSearch]);
 
   return (
-    <div
-      className={clsx(
-        "flex flex-1 items-center rounded-md border bg-white",
-        focused ? "border-stone-500" : "border-stone-400",
-      )}
-    >
+    <div className="flex flex-1 items-center rounded-md border border-stone-400 bg-white ring-cyan-600 ring-offset-2 has-[:focus-visible]:ring-2">
       <div className="ml-2 text-stone-500">
         <SearchIcon className="h-4 w-4" />
       </div>
       <input
-        className="h-full flex-1 rounded-md px-2 focus:outline-none"
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        className="h-full flex-1 rounded-md px-2 focus-visible:outline-none"
         value={search}
         onChange={(e) => {
           setSearch(e.target.value);
           handleSearch(e.target.value);
         }}
+        autoFocus
       />
     </div>
   );

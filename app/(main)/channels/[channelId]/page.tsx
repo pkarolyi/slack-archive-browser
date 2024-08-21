@@ -18,7 +18,7 @@ export default async function ChannelPage({
   searchParams: {
     page?: string;
     size?: string;
-    messageTs?: string;
+    hl?: string;
   };
 }>) {
   const channelId = params.channelId;
@@ -53,7 +53,7 @@ export default async function ChannelPage({
           channelId={channelId}
           take={take}
           skip={skip}
-          highlightedTs={searchParams.messageTs}
+          highlightedTs={searchParams.hl}
         />
       </Suspense>
     </Content>

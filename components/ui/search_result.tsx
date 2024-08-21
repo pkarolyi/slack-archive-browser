@@ -18,9 +18,9 @@ export default async function SearchResult({
 
   return (
     <Link
-      href={`/channels/${message.channel.id}?messageTs=${message.ts}&page=${messagePage}&take=100`}
+      href={`/channels/${message.channel.id}?hl=${message.ts}&page=${messagePage}&take=100`}
     >
-      <div className="mb-4 rounded-md border border-stone-300 bg-white px-2 py-1 text-stone-800 hover:border-stone-400 hover:bg-stone-100">
+      <div className="mb-4 rounded-md border border-stone-300 bg-white px-2 py-1 text-stone-800 hover:border-cyan-600 hover:bg-cyan-50">
         <div className="font-bold text-stone-600"># {message.channel.name}</div>
         <div className="flex flex-row items-start gap-2">
           {message.user.imageUrl && (

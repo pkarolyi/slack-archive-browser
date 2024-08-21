@@ -8,9 +8,17 @@ export default async function SearchResults({
 
   return (
     <div className="h-full overflow-x-hidden overflow-y-scroll py-1 lg:px-4 lg:py-2">
-      {messages.map((message) => (
-        <SearchResult key={message.id} message={message} />
-      ))}
+      {messages.length === 0 ? (
+        term ? (
+          <div>No messages found.</div>
+        ) : (
+          <div>Use the search bar to search.</div>
+        )
+      ) : (
+        messages.map((message) => (
+          <SearchResult key={message.id} message={message} />
+        ))
+      )}
     </div>
   );
 }
