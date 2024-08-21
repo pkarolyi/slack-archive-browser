@@ -13,8 +13,10 @@ export default function Message({
   return (
     <div
       className={clsx(
-        "rounded-md px-2 py-1 text-stone-800 hover:bg-stone-200",
-        highlighted && "border border-cyan-600 bg-cyan-50 hover:bg-cyan-100",
+        "rounded-md px-2 py-1 text-stone-800",
+        highlighted
+          ? "my-1 border border-cyan-600 bg-cyan-50 hover:bg-cyan-100"
+          : "hover:bg-stone-200",
       )}
     >
       <div className="flex flex-row items-start gap-2">
