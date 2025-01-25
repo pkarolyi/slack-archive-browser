@@ -29,13 +29,16 @@ export default function Message({
   return (
     <div
       className={clsx(
-        "rounded-md px-2 py-1 text-stone-800",
+        "relative rounded-md px-2 py-1 text-stone-800",
         highlighted
           ? "my-1 border border-cyan-600 bg-cyan-50 hover:bg-cyan-100"
           : "hover:bg-stone-200",
       )}
       ref={messageRef}
     >
+      <div className="absolute right-0 top-0">
+        <button className="border border-stone-400"></button>
+      </div>
       <div className="flex flex-row items-start gap-2">
         {message.user.imageUrl && (
           <div className="mt-1 flex-none">

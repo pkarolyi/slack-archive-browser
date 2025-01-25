@@ -1,9 +1,11 @@
+import type { ReadonlyURLSearchParams } from "next/navigation";
+
 export function createURLWithSearchParams(
   pathname: string,
-  searchParams: URLSearchParams,
+  searchParams: ReadonlyURLSearchParams,
   newSearchParams: { [key: string]: any },
 ) {
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(Array.from(searchParams.entries()));
   for (const [key, value] of Object.entries(newSearchParams)) {
     if (value) {
       params.set(key, value.toString());
