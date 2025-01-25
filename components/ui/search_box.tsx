@@ -22,12 +22,12 @@ export default function SearchBox() {
   }, [currentSearch]);
 
   return (
-    <div className="flex flex-1 items-center rounded-md border border-stone-400 bg-white ring-cyan-600 ring-offset-2 has-[:focus-visible]:ring-2">
+    <div className="flex flex-1 items-center rounded-md border border-stone-400 bg-white ring-cyan-600 ring-offset-2 has-focus-visible:ring-2">
       <div className="ml-2 text-stone-500">
         <SearchIcon className="size-4" />
       </div>
       <input
-        className="h-full flex-1 rounded-md px-2 focus-visible:outline-none"
+        className="h-full flex-1 rounded-md px-2 focus-visible:outline-hidden"
         value={search}
         onChange={(e) => {
           setSearch(e.target.value);

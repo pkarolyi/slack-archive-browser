@@ -15,7 +15,7 @@ export default function SidebarSkeleton() {
         </div>
         <div className="text-stone-50 text-xs border-t border-stone-500 px-4 py-2 flex gap-2 items-center">
           Last archived message:
-          <div className="w-[12em] h-[1em] bg-stone-50 rounded-sm animate-pulse" />
+          <div className="w-[12em] h-[1em] bg-stone-50 rounded-xs animate-pulse" />
         </div>
       </div>
     </div>

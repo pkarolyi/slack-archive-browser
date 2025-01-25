@@ -13,7 +13,7 @@ export default function SearchPage({
 }>) {
   return (
     <Content>
-      <ContentHeader className="!gap-2">
+      <ContentHeader className="gap-2!">
         <BackToButton />
         <SearchBox />
       </ContentHeader>
