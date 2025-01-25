@@ -107,7 +107,6 @@ export async function searchMessages({ term }: { term?: string }) {
             { user: { name: { contains: term } } },
           ],
         },
-        onlyToplevelMessages,
       ],
     },
     orderBy: { ts: "asc" },

@@ -7,7 +7,7 @@ import "./globals.css";
 const lato = Lato({ weight: ["400", "700"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "CPPFTW Archive | BETA",
+  title: "CPPFTW Archive",
 };
 
 export default async function RootLayout({

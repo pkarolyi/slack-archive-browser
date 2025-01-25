@@ -1,15 +1,31 @@
+"use client";
+
 import type { MessageWithUserAndThread } from "@/types/prisma";
 import Image from "next/image";
 import Timestamp from "./timestamp";
 import clsx from "clsx";
+import { useEffect, useRef } from "react";
 
 export default function Message({
   message,
-  highlighted = false,
+  highlightedTs,
 }: Readonly<{
   message: MessageWithUserAndThread;
-  highlighted?: boolean;
+  highlightedTs?: string;
 }>) {
+  const messageRef = useRef<HTMLDivElement | null>(null);
+
+  const highlighted = highlightedTs === message.ts;
+
+  useEffect(() => {
+    if (highlighted && messageRef.current) {
+      messageRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [highlighted, messageRef]);
+
   return (
     <div
       className={clsx(
@@ -18,6 +34,7 @@ export default function Message({
           ? "my-1 border border-cyan-600 bg-cyan-50 hover:bg-cyan-100"
           : "hover:bg-stone-200",
       )}
+      ref={messageRef}
     >
       <div className="flex flex-row items-start gap-2">
         {message.user.imageUrl && (
@@ -31,7 +48,7 @@ export default function Message({
             />
           </div>
         )}
-        <div className="flex flex-col">
+        <div className="flex flex-1 flex-col">
           <div className="flex gap-2 text-sm lg:text-base">
             <span className="font-bold">{message.user.name}</span>
             <Timestamp date={message.isoDate} />
@@ -40,7 +57,11 @@ export default function Message({
             {message.text}
           </p>
           {message.threadReplies?.map((reply) => (
-            <Message key={reply.id} message={{ ...reply, threadReplies: [] }} />
+            <Message
+              key={reply.id}
+              message={{ ...reply, threadReplies: [] }}
+              highlightedTs={highlightedTs}
+            />
           ))}
         </div>
       </div>
