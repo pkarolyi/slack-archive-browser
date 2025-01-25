@@ -3,23 +3,14 @@ import { MessageType } from "@prisma/client";
 import Image from "next/image";
 import Timestamp from "./timestamp";
 import Link from "next/link";
-import { getMessagePageFromTs } from "@/lib/data";
 
 export default async function SearchResult({
   message,
 }: Readonly<{
   message: MessageWithUserAndChannel;
 }>) {
-  const messagePage = await getMessagePageFromTs({
-    channelId: message.channel.id,
-    ts: message.ts,
-    take: 100,
-  });
-
   return (
-    <Link
-      href={`/channels/${message.channel.id}?hl=${message.ts}&page=${messagePage}&take=100`}
-    >
+    <Link href={`/channels/${message.ts}`}>
       <div className="mb-4 rounded-md border border-stone-300 bg-white px-2 py-1 text-stone-800 hover:border-cyan-600 hover:bg-cyan-50">
         <div className="font-bold text-stone-600"># {message.channel.name}</div>
         <div className="flex flex-row items-start gap-2">
