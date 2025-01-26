@@ -51,6 +51,7 @@ async function createMessages(
   messages: any[],
 ) {
   const processedMessages: any[] = [];
+  const reactions: any[] = [];
   const childMeta: any = {};
   const parentLookup: any = {};
   for (const message of messages) {
@@ -105,6 +106,20 @@ async function createMessages(
       userId: message.user,
       channelId: channelId,
     });
+
+    // process reactions
+    if (message.reactions) {
+      for (const reaction of message.reactions) {
+        for (const user of reaction.users) {
+          reactions.push({
+            id: randomUUID(),
+            messageId: message.id,
+            userId: user,
+            name: reaction.name,
+          });
+        }
+      }
+    }
   }
 
   // for thread messages we need to find their parent
@@ -127,8 +142,14 @@ async function createMessages(
     finalMessages.push(message);
   }
 
+  console.log(`    creating messages...`);
   await prisma.message.createMany({
     data: finalMessages,
+  });
+
+  console.log(`    creating reactions...`);
+  await prisma.reaction.createMany({
+    data: reactions,
   });
 }
 

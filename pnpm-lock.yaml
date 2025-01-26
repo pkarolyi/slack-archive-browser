@@ -14,6 +14,9 @@ importers:
       clsx:
         specifier: 2.1.1
         version: 2.1.1
+      emoji-js:
+        specifier: 3.8.1
+        version: 3.8.1
       next:
         specifier: 14.2.23
         version: 14.2.23(react-dom@18.3.0(react@18.3.0))(react@18.3.0)
@@ -39,6 +42,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: 4.0.0
         version: 4.0.0
+      '@types/emoji-js':
+        specifier: 3.5.2
+        version: 3.5.2
       '@types/node':
         specifier: 22.10.10
         version: 22.10.10
@@ -463,6 +469,9 @@ packages:
   '@tailwindcss/postcss@4.0.0':
     resolution: {integrity: sha512-lI2bPk4TvwavHdehjr5WiC6HnZ59hacM6ySEo4RM/H7tsjWd8JpqiNW9ThH7rO/yKtrn4mGBoXshpvn8clXjPg==}
 
+  '@types/emoji-js@3.5.2':
+    resolution: {integrity: sha512-qPR85yjSPk2UEbdjYYNHfcOjVod7DCARSrJlPcL+cwaDFwdnmOFhPyYUvP5GaW0YZEy8mU93ZjTNgsVWz1zzlg==}
+
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
@@ -721,6 +730,12 @@ packages:
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
+
+  emoji-datasource@15.0.1:
+    resolution: {integrity: sha512-aF5Q6LCKXzJzpG4K0ETiItuzz0xLYxNexR9qWw45/shuuEDWZkOIbeGHA23uopOSYA/LmeZIXIFsySCx+YKg2g==}
+
+  emoji-js@3.8.1:
+    resolution: {integrity: sha512-yyXMnZLXgqQHAhEm2DKK4Nrca+jbLQfNOP2mLcNTS6XxzzbQLDFHAguPQrtJS4Udot0Pvomwmh1ckQzhrePhKw==}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -2097,6 +2112,8 @@ snapshots:
       postcss: 8.5.1
       tailwindcss: 4.0.0
 
+  '@types/emoji-js@3.5.2': {}
+
   '@types/json5@0.0.29': {}
 
   '@types/node@22.10.10':
@@ -2395,6 +2412,12 @@ snapshots:
       esutils: 2.0.3
 
   eastasianwidth@0.2.0: {}
+
+  emoji-datasource@15.0.1: {}
+
+  emoji-js@3.8.1:
+    dependencies:
+      emoji-datasource: 15.0.1
 
   emoji-regex@8.0.0: {}
 

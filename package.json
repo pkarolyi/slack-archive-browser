@@ -11,12 +11,14 @@
     "db:local:start": "scripts/start_local_db.sh",
     "db:local:stop": "scripts/stop_local_db.sh",
     "db:reset": "prisma migrate reset",
+    "db:migrate:dev": "prisma migrate dev",
     "archive:import": "tsx scripts/archive_to_db.ts .archive",
     "archive:import:test": "tsx scripts/archive_to_db.ts .archive export-test"
   },
   "dependencies": {
     "@prisma/client": "6.2.1",
     "clsx": "2.1.1",
+    "emoji-js": "3.8.1",
     "next": "14.2.23",
     "next-auth": "4.24.11",
     "react": "18.3.0",
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.0.0",
+    "@types/emoji-js": "3.5.2",
     "@types/node": "22.10.10",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",

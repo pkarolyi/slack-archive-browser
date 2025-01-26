@@ -1,11 +1,18 @@
 import { Prisma } from "@prisma/client";
 
-const messageWithUserAndThread = Prisma.validator<Prisma.MessageDefaultArgs>()({
-  include: { user: true, threadReplies: { include: { user: true } } },
-});
+const messageWithUserReactionThread =
+  Prisma.validator<Prisma.MessageDefaultArgs>()({
+    include: {
+      user: true,
+      reactions: { include: { user: true } },
+      threadReplies: {
+        include: { user: true, reactions: { include: { user: true } } },
+      },
+    },
+  });
 
-export type MessageWithUserAndThread = Prisma.MessageGetPayload<
-  typeof messageWithUserAndThread
+export type MessageWithUserReactionThread = Prisma.MessageGetPayload<
+  typeof messageWithUserReactionThread
 >;
 
 const messageWithUserAndChannel = Prisma.validator<Prisma.MessageDefaultArgs>()(
@@ -21,3 +28,9 @@ export type MessageWithUserAndChannel = Prisma.MessageGetPayload<
 const channel = Prisma.validator<Prisma.ChannelDefaultArgs>()({});
 
 export type Channel = Prisma.ChannelGetPayload<typeof channel>;
+
+const reaction = Prisma.validator<Prisma.ReactionDefaultArgs>()({
+  include: { user: true },
+});
+
+export type Reaction = Prisma.ReactionGetPayload<typeof reaction>;

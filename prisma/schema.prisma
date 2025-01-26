@@ -13,7 +13,8 @@ model User {
   name     String
   imageUrl String?
 
-  messages Message[]
+  messages  Message[]
+  reactions Reaction[]
 }
 
 model Channel {
@@ -41,12 +42,25 @@ model Message {
   userId    String
   parentId  String?
 
-  user          User      @relation(fields: [userId], references: [id])
-  channel       Channel   @relation(fields: [channelId], references: [id])
-  threadParent  Message?  @relation("message_thread", fields: [parentId], references: [id])
-  threadReplies Message[] @relation("message_thread")
+  user          User       @relation(fields: [userId], references: [id])
+  channel       Channel    @relation(fields: [channelId], references: [id])
+  threadParent  Message?   @relation("message_thread", fields: [parentId], references: [id])
+  threadReplies Message[]  @relation("message_thread")
+  reactions     Reaction[]
 
   @@index([ts])
   @@index([channelId])
   @@index([userId])
+}
+
+model Reaction {
+  id        String @id
+  name      String
+  messageId String
+  userId    String
+
+  message Message @relation(fields: [messageId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@index([messageId])
 }

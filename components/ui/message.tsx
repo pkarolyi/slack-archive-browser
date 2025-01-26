@@ -1,18 +1,18 @@
 "use client";
 
-import type { MessageWithUserAndThread } from "@/types/prisma";
+import type { MessageWithUserReactionThread } from "@/types/prisma";
 import Image from "next/image";
 import Timestamp from "./timestamp";
 import clsx from "clsx";
 import { useEffect, useRef } from "react";
-import ShareIcon from "../icons/share";
-import { toast } from "react-toastify";
+import MessageReactions from "./message_reactions";
+import MeassageActions from "./message_actions";
 
 export default function Message({
   message,
   highlightedTs,
 }: Readonly<{
-  message: MessageWithUserAndThread;
+  message: MessageWithUserReactionThread;
   highlightedTs?: string;
 }>) {
   const messageRef = useRef<HTMLDivElement | null>(null);
@@ -28,31 +28,17 @@ export default function Message({
     }
   }, [highlighted, messageRef]);
 
-  const onShare = async () => {
-    await navigator.clipboard.writeText(
-      `${window.location.origin}/channels/${message.channelId}/${message.ts}`,
-    );
-    toast("📋 Copied message link to clipboard");
-  };
-
   return (
     <div
       className={clsx(
-        "group relative rounded-md px-2 py-1 text-stone-800",
+        "group/message relative rounded-md px-2 py-1 text-stone-800",
         highlighted
           ? "my-1 border border-cyan-600 bg-cyan-50 hover:bg-cyan-100"
           : "hover:bg-stone-200",
       )}
       ref={messageRef}
     >
-      <div className="absolute -top-3 right-2 hidden gap-2 group-hover:flex">
-        <button
-          onClick={onShare}
-          className="rounded-md border border-stone-400 bg-white p-1 hover:cursor-pointer hover:bg-stone-100 active:bg-stone-200"
-        >
-          <ShareIcon className="size-5" />
-        </button>
-      </div>
+      <MeassageActions message={message} />
       <div className="flex flex-row items-start gap-2">
         {message.user.imageUrl && (
           <div className="mt-1 flex-none">
@@ -73,6 +59,7 @@ export default function Message({
           <p className="text-sm whitespace-pre-line lg:text-base">
             {message.text}
           </p>
+          <MessageReactions reactions={message.reactions} />
           {message.threadReplies?.map((reply) => (
             <Message
               key={reply.id}
