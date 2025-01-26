@@ -3,6 +3,7 @@ import { MessageType } from "@prisma/client";
 import Image from "next/image";
 import Timestamp from "./timestamp";
 import Link from "next/link";
+import { emojiConvertor } from "@/lib/emoji_convertor";
 
 export default async function SearchResult({
   message,
@@ -31,7 +32,7 @@ export default async function SearchResult({
               <Timestamp date={message.isoDate} />
             </div>
             <p className="text-sm whitespace-pre-line lg:text-base">
-              {message.text}
+              {emojiConvertor.replace_colons(message.text)}
             </p>
             {message.type === MessageType.THREAD_PARENT && (
               <div className="font-bold text-stone-600">

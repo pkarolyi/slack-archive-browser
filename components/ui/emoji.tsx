@@ -1,8 +1,4 @@
-import EmojiConvertor from "emoji-js";
-
-const emoji = new EmojiConvertor();
-emoji.replace_mode = "unified";
-emoji.allow_native = true;
+import { emojiConvertor } from "@/lib/emoji_convertor";
 
 export default function Emoji({
   name,
@@ -12,11 +8,8 @@ export default function Emoji({
   className?: string;
 }) {
   return (
-    <span
-      dangerouslySetInnerHTML={{
-        __html: emoji.replace_colons(`:${name}:`),
-      }}
-      className={className}
-    />
+    <span className={className}>
+      {emojiConvertor.replace_colons(`:${name}:`)}
+    </span>
   );
 }

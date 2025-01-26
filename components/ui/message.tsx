@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { useEffect, useRef } from "react";
 import MessageReactions from "./message_reactions";
 import MeassageActions from "./message_actions";
+import { emojiConvertor } from "@/lib/emoji_convertor";
 
 export default function Message({
   message,
@@ -58,7 +59,7 @@ export default function Message({
               <Timestamp date={message.isoDate} />
             </div>
             <p className="text-sm whitespace-pre-line lg:text-base">
-              {message.text}
+              {emojiConvertor.replace_colons(message.text)}
             </p>
             <MessageReactions reactions={message.reactions} />
           </div>
