@@ -10,7 +10,7 @@ export default async function SearchResult({
   message: MessageWithUserAndChannel;
 }>) {
   return (
-    <Link href={`/channels/${message.ts}`}>
+    <Link href={`/channels/${message.channelId}/${message.ts}`}>
       <div className="mb-4 rounded-md border border-stone-300 bg-white px-2 py-1 text-stone-800 hover:border-cyan-600 hover:bg-cyan-50">
         <div className="font-bold text-stone-600"># {message.channel.name}</div>
         <div className="flex flex-row items-start gap-2">
@@ -30,7 +30,7 @@ export default async function SearchResult({
               <span className="font-bold">{message.user.name}</span>
               <Timestamp date={message.isoDate} />
             </div>
-            <p className="whitespace-pre-line text-sm lg:text-base">
+            <p className="text-sm whitespace-pre-line lg:text-base">
               {message.text}
             </p>
             {message.type === MessageType.THREAD_PARENT && (
