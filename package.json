@@ -21,6 +21,7 @@
     "next-auth": "4.24.11",
     "react": "18.3.0",
     "react-dom": "18.3.0",
+    "react-toastify": "11.0.3",
     "server-only": "0.0.1",
     "use-debounce": "10.0.4"
   },

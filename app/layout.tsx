@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import { redirect } from "next/navigation";
 import "./globals.css";
+import { Flip, ToastContainer } from "react-toastify";
 
 const lato = Lato({ weight: ["400", "700"], subsets: ["latin"] });
 
@@ -24,7 +25,15 @@ export default async function RootLayout({
   else
     return (
       <html lang="en">
-        <body className={lato.className}>{children}</body>
+        <body className={lato.className}>
+          {children}
+          <ToastContainer
+            position="bottom-right"
+            theme="dark"
+            transition={Flip}
+            hideProgressBar
+          />
+        </body>
       </html>
     );
 }

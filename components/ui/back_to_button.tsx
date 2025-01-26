@@ -11,7 +11,7 @@ export default function BackToButton() {
       onClick={router.back}
       className="text-stone-700 hover:text-stone-900"
     >
-      <ArrowLeftIcon />
+      <ArrowLeftIcon className="size-6" />
     </button>
   );
 }

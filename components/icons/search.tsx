@@ -1,5 +1,3 @@
-import clsx from "clsx";
-
 export default function SearchIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -8,7 +6,7 @@ export default function SearchIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className={clsx("size-6", className)}
+      className={className}
     >
       <path
         strokeLinecap="round"

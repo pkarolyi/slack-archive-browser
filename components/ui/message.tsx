@@ -5,6 +5,8 @@ import Image from "next/image";
 import Timestamp from "./timestamp";
 import clsx from "clsx";
 import { useEffect, useRef } from "react";
+import ShareIcon from "../icons/share";
+import { toast } from "react-toastify";
 
 export default function Message({
   message,
@@ -26,18 +28,30 @@ export default function Message({
     }
   }, [highlighted, messageRef]);
 
+  const onShare = async () => {
+    await navigator.clipboard.writeText(
+      `${window.location.origin}/channels/${message.channelId}/${message.ts}`,
+    );
+    toast("📋 Copied message link to clipboard");
+  };
+
   return (
     <div
       className={clsx(
-        "relative rounded-md px-2 py-1 text-stone-800",
+        "group relative rounded-md px-2 py-1 text-stone-800",
         highlighted
           ? "my-1 border border-cyan-600 bg-cyan-50 hover:bg-cyan-100"
           : "hover:bg-stone-200",
       )}
       ref={messageRef}
     >
-      <div className="absolute right-0 top-0">
-        <button className="border border-stone-400"></button>
+      <div className="absolute -top-3 right-2 hidden gap-2 group-hover:flex">
+        <button
+          onClick={onShare}
+          className="rounded-md border border-stone-400 bg-white p-1 hover:cursor-pointer hover:bg-stone-100 active:bg-stone-200"
+        >
+          <ShareIcon className="size-5" />
+        </button>
       </div>
       <div className="flex flex-row items-start gap-2">
         {message.user.imageUrl && (
@@ -56,7 +70,7 @@ export default function Message({
             <span className="font-bold">{message.user.name}</span>
             <Timestamp date={message.isoDate} />
           </div>
-          <p className="whitespace-pre-line text-sm lg:text-base">
+          <p className="text-sm whitespace-pre-line lg:text-base">
             {message.text}
           </p>
           {message.threadReplies?.map((reply) => (
