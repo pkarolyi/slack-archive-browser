@@ -1,2 +1,2 @@
 #!/bin/sh
-docker stop "cppftw-archive-postgres"
+docker stop "slack-archive-postgres"

@@ -1,6 +1,6 @@
 {
-  "name": "cppftw-archive",
-  "version": "0.2.0",
+  "name": "slack-archive-browser",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "scripts/start_local_db.sh && next dev && scripts/stop_local_db.sh",

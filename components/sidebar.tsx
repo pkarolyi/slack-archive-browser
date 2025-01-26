@@ -12,7 +12,7 @@ export default async function Sidebar() {
     <div className="h-full rounded-l-md backdrop-brightness-50">
       <div className="flex h-full flex-col">
         <div className="h-16 border-b border-stone-500 p-4 text-2xl font-bold text-stone-50">
-          <h1>CPP FTW</h1>
+          <h1>{process.env.NEXT_PUBLIC_TITLE}</h1>
         </div>
         <Channels channels={channels} />
         <div className="border-t border-stone-500 px-4 py-2 text-xs text-stone-50">

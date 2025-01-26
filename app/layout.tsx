@@ -8,7 +8,7 @@ import { Flip, ToastContainer } from "react-toastify";
 const lato = Lato({ weight: ["400", "700"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "CPPFTW Archive",
+  title: process.env.NEXT_PUBLIC_TITLE,
 };
 
 export default async function RootLayout({
