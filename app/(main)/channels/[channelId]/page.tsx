@@ -1,11 +1,10 @@
 import Messages from "@/components/messages";
 import MessagesSkeleton from "@/components/skeletons/messages_skeleton";
+import BackToButton from "@/components/ui/back_to_button";
 import Content from "@/components/ui/content";
-import ContentHeader from "@/components/ui/content_header";
 import Paginator from "@/components/ui/paginator";
 import SearchBox from "@/components/ui/search_box";
 import { getChannelMessagesCount, getChannelName } from "@/lib/data";
-import Link from "next/link";
 import { Suspense } from "react";
 
 export default async function ChannelPage({
@@ -33,21 +32,18 @@ export default async function ChannelPage({
 
   return (
     <Content>
-      <ContentHeader>
+      <div className="flex flex-none flex-col justify-between gap-2 border-b border-stone-400 p-4 lg:h-16 lg:flex-row lg:gap-8">
         <div className="flex items-start justify-between gap-2">
-          <div className="text-xl font-bold text-stone-900 lg:text-2xl">
+          <div className="flex items-start gap-2 text-xl font-bold text-stone-900 lg:gap-0 lg:text-2xl">
+            <a href="/channels" className="inline lg:hidden">
+              <BackToButton />
+            </a>
             # {channelName}
           </div>
-          <Link
-            className="block text-2xl leading-none lg:hidden"
-            href="/channels"
-          >
-            &#9776;
-          </Link>
         </div>
         <SearchBox />
         <Paginator pageCount={Math.ceil(totalMessages / take)} />
-      </ContentHeader>
+      </div>
       <Suspense key={`${page}-${take}`} fallback={<MessagesSkeleton />}>
         <Messages
           channelId={channelId}

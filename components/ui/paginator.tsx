@@ -32,7 +32,7 @@ function PaginationLink({
       >
         <div
           className={clsx(
-            "h-full min-w-[1.5em] py-[1px] text-center lg:min-w-[2em] lg:px-2",
+            "h-full min-w-[1.5em] px-2 py-1 text-center lg:min-w-[2em] lg:py-[1px]",
             !page && "cursor-default",
           )}
         >
@@ -49,18 +49,15 @@ export default function Paginator({
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1");
 
+  const middleLength = Math.min(5, pageCount - 2);
   const middleComponents = Array.from(
-    { length: 5 },
-    (_, i) => currentPage - 2 + i,
+    { length: middleLength },
+    (_, i) => currentPage - Math.floor(middleLength / 2) + i,
   ).filter((c) => c > 1 && c < pageCount);
 
   return (
     <nav>
-      <ul className="flex h-full">
-        <PaginationLink
-          page={currentPage - 1 > 0 ? currentPage - 1 : undefined}
-          text="<"
-        />
+      <ul className="flex h-full justify-center lg:justify-start">
         <PaginationLink page={1} />
         {middleComponents[0] > 2 && <PaginationLink text="..." />}
         {middleComponents.map((c) => (
@@ -70,10 +67,6 @@ export default function Paginator({
           <PaginationLink text="..." />
         )}
         {pageCount > 1 && <PaginationLink page={pageCount} />}
-        <PaginationLink
-          page={currentPage + 1 < pageCount ? currentPage + 1 : undefined}
-          text=">"
-        />
       </ul>
     </nav>
   );

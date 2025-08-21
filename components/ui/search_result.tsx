@@ -31,7 +31,7 @@ export default async function SearchResult({
               <span className="font-bold">{message.user.name}</span>
               <Timestamp date={message.isoDate} />
             </div>
-            <p className="text-sm whitespace-pre-line lg:text-base">
+            <p className="truncate text-sm whitespace-pre-line lg:text-base">
               {emojiConvertor.replace_colons(message.text)}
             </p>
             {message.type === MessageType.THREAD_PARENT && (

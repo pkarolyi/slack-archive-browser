@@ -2,7 +2,6 @@ import SearchResults from "@/components/search_results";
 import SearchResultsSkeleton from "@/components/skeletons/search_results_skeleton";
 import BackToButton from "@/components/ui/back_to_button";
 import Content from "@/components/ui/content";
-import ContentHeader from "@/components/ui/content_header";
 import SearchBox from "@/components/ui/search_box";
 import { Suspense } from "react";
 
@@ -13,10 +12,10 @@ export default function SearchPage({
 }>) {
   return (
     <Content>
-      <ContentHeader className="gap-2!">
+      <div className="flex flex-none flex-row justify-between gap-2 border-b border-stone-400 p-4 lg:h-16">
         <BackToButton />
         <SearchBox />
-      </ContentHeader>
+      </div>
       <Suspense key={searchParams.term} fallback={<SearchResultsSkeleton />}>
         <SearchResults term={searchParams.term} />
       </Suspense>

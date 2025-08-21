@@ -7,7 +7,7 @@ export default async function SearchResults({
   const messages = await searchMessages({ term });
 
   return (
-    <div className="h-full overflow-x-hidden overflow-y-scroll py-1 lg:px-4 lg:py-2">
+    <div className="h-full overflow-x-hidden overflow-y-scroll px-2 py-1 lg:px-4 lg:py-2">
       {messages.length === 0 ? (
         term ? (
           <div>No messages found.</div>
