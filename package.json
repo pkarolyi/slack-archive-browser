@@ -13,7 +13,8 @@
     "db:reset": "prisma migrate reset",
     "db:migrate:dev": "prisma migrate dev",
     "archive:import": "tsx scripts/archive_to_db.ts .archive",
-    "archive:import:test": "tsx scripts/archive_to_db.ts .archive export-test"
+    "archive:import:test": "tsx scripts/archive_to_db.ts .archive export-test",
+    "archive:reset": "scripts/start_local_db.sh && prisma migrate reset && tsx scripts/archive_to_db.ts .archive && scripts/stop_local_db.sh"
   },
   "dependencies": {
     "@prisma/client": "6.2.1",

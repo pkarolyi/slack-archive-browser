@@ -103,6 +103,7 @@ async function createMessages(
       type: message.type,
       isoDate: new Date(message.ts.split(".")[0] * 1000).toISOString(),
       text: message.text || "[empty_message_text]",
+      blocks: message.blocks || null,
       userId: message.user,
       channelId: channelId,
     });

@@ -7,7 +7,7 @@ import clsx from "clsx";
 import { useEffect, useRef } from "react";
 import MessageReactions from "./message_reactions";
 import MeassageActions from "./message_actions";
-import { emojiConvertor } from "@/lib/emoji_convertor";
+import RichTextRenderer from "./rich_text_renderer";
 
 export default function Message({
   message,
@@ -58,9 +58,10 @@ export default function Message({
               <span className="font-bold">{message.user.name}</span>
               <Timestamp date={message.isoDate} />
             </div>
-            <p className="text-sm whitespace-pre-line lg:text-base">
-              {emojiConvertor.replace_colons(message.text)}
-            </p>
+            <RichTextRenderer
+              blocks={message.blocks}
+              plainText={message.text}
+            />
             <MessageReactions reactions={message.reactions} />
           </div>
         </div>

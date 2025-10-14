@@ -37,6 +37,7 @@ model Message {
   ts        String
   isoDate   String
   text      String
+  blocks    Json?
   type      MessageType
   channelId String
   userId    String
