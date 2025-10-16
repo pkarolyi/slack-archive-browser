@@ -3,12 +3,14 @@ import { MessageType } from "@prisma/client";
 import Image from "next/image";
 import Timestamp from "./timestamp";
 import Link from "next/link";
-import { emojiConvertor } from "@/lib/emoji_convertor";
+import RichTextRenderer from "./rich_text_renderer";
 
 export default async function SearchResult({
   message,
+  userMap,
 }: Readonly<{
   message: MessageWithUserAndChannel;
+  userMap: Map<string, string>;
 }>) {
   return (
     <Link href={`/channels/${message.channelId}/${message.ts}`}>
@@ -31,9 +33,11 @@ export default async function SearchResult({
               <span className="font-bold">{message.user.name}</span>
               <Timestamp date={message.isoDate} />
             </div>
-            <p className="truncate text-sm whitespace-pre-line lg:text-base">
-              {emojiConvertor.replace_colons(message.text)}
-            </p>
+            <RichTextRenderer
+              blocks={message.blocks}
+              plainText={message.text}
+              userMap={userMap}
+            />
             {message.type === MessageType.THREAD_PARENT && (
               <div className="font-bold text-stone-600">
                 This message has thread replies
