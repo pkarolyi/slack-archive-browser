@@ -1,15 +1,17 @@
-import { searchMessages, getAllUsers } from "@/lib/data";
+import { searchMessages, getAllUsers, getChannels } from "@/lib/data";
 import SearchResult from "./ui/search_result";
 
 export default async function SearchResults({
   term,
 }: Readonly<{ term?: string }>) {
-  const [messages, users] = await Promise.all([
+  const [messages, users, channels] = await Promise.all([
     searchMessages({ term }),
     getAllUsers(),
+    getChannels(),
   ]);
 
   const userMap = new Map(users.map((user) => [user.id, user.name]));
+  const channelMap = new Map(channels.map((channel) => [channel.id, channel.name]));
 
   return (
     <div className="h-full overflow-x-hidden overflow-y-scroll px-2 py-1 lg:px-4 lg:py-2">
@@ -21,7 +23,7 @@ export default async function SearchResults({
         )
       ) : (
         messages.map((message) => (
-          <SearchResult key={message.id} message={message} userMap={userMap} />
+          <SearchResult key={message.id} message={message} userMap={userMap} channelMap={channelMap} />
         ))
       )}
     </div>

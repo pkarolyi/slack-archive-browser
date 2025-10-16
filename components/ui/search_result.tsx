@@ -8,9 +8,11 @@ import RichTextRenderer from "./rich_text_renderer";
 export default async function SearchResult({
   message,
   userMap,
+  channelMap,
 }: Readonly<{
   message: MessageWithUserAndChannel;
   userMap: Map<string, string>;
+  channelMap: Map<string, string>;
 }>) {
   return (
     <Link href={`/channels/${message.channelId}/${message.ts}`}>
@@ -37,6 +39,7 @@ export default async function SearchResult({
               blocks={message.blocks}
               plainText={message.text}
               userMap={userMap}
+              channelMap={channelMap}
             />
             {message.type === MessageType.THREAD_PARENT && (
               <div className="font-bold text-stone-600">

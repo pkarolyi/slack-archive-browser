@@ -13,10 +13,12 @@ export default function Message({
   message,
   highlightedTs,
   userMap,
+  channelMap,
 }: Readonly<{
   message: MessageWithUserReactionThread;
   highlightedTs?: string;
   userMap: Map<string, string>;
+  channelMap: Map<string, string>;
 }>) {
   const messageRef = useRef<HTMLDivElement | null>(null);
 
@@ -64,6 +66,7 @@ export default function Message({
               blocks={message.blocks}
               plainText={message.text}
               userMap={userMap}
+              channelMap={channelMap}
             />
             <MessageReactions reactions={message.reactions} />
           </div>
@@ -76,6 +79,7 @@ export default function Message({
             message={{ ...reply, threadReplies: [] }}
             highlightedTs={highlightedTs}
             userMap={userMap}
+            channelMap={channelMap}
           />
         ))}
       </div>

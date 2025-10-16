@@ -1,6 +1,7 @@
 "use client";
 
 import { emojiConvertor } from "@/lib/emoji_convertor";
+import Link from "next/link";
 
 interface TextElement {
   type: "text";
@@ -23,13 +24,18 @@ interface UserElement {
   user_id: string;
 }
 
+interface ChannelElement {
+  type: "channel";
+  channel_id: string;
+}
+
 interface LinkElement {
   type: "link";
   url: string;
   text?: string;
 }
 
-type InlineElement = TextElement | EmojiElement | UserElement | LinkElement;
+type InlineElement = TextElement | EmojiElement | UserElement | ChannelElement | LinkElement;
 
 interface RichTextSection {
   type: "rich_text_section";
@@ -68,6 +74,7 @@ function renderInlineElement(
   element: InlineElement,
   key: number,
   userMap?: Map<string, string>,
+  channelMap?: Map<string, string>,
 ): React.ReactNode {
   switch (element.type) {
     case "text": {
@@ -128,6 +135,19 @@ function renderInlineElement(
       );
     }
 
+    case "channel": {
+      const channelName = channelMap?.get(element.channel_id) || element.channel_id;
+      return (
+        <Link
+          key={key}
+          href={`/channels/${element.channel_id}`}
+          className="font-semibold text-cyan-700 hover:underline"
+        >
+          #{channelName}
+        </Link>
+      );
+    }
+
     case "link": {
       const displayText = element.text || element.url;
       return (
@@ -155,12 +175,13 @@ function renderBlockElement(
   element: BlockElement,
   key: number,
   userMap?: Map<string, string>,
+  channelMap?: Map<string, string>,
 ): React.ReactNode {
   switch (element.type) {
     case "rich_text_section": {
       return (
         <span key={key}>
-          {element.elements.map((el, i) => renderInlineElement(el, i, userMap))}
+          {element.elements.map((el, i) => renderInlineElement(el, i, userMap, channelMap))}
         </span>
       );
     }
@@ -176,7 +197,7 @@ function renderBlockElement(
         <ListTag key={key} className={listClass}>
           {element.elements.map((item, i) => (
             <li key={i}>
-              {item.elements.map((el, j) => renderInlineElement(el, j, userMap))}
+              {item.elements.map((el, j) => renderInlineElement(el, j, userMap, channelMap))}
             </li>
           ))}
         </ListTag>
@@ -189,7 +210,7 @@ function renderBlockElement(
           key={key}
           className="border-l-4 border-stone-400 pl-4 text-stone-600 italic"
         >
-          {element.elements.map((el, i) => renderInlineElement(el, i, userMap))}
+          {element.elements.map((el, i) => renderInlineElement(el, i, userMap, channelMap))}
         </blockquote>
       );
     }
@@ -218,13 +239,20 @@ function renderBlockElement(
   }
 }
 
-function renderPlainText(plainText: string, userMap?: Map<string, string>) {
+function renderPlainText(plainText: string, userMap?: Map<string, string>, channelMap?: Map<string, string>) {
   // Replace user mentions like <@U1234567> with actual usernames
+  // Replace channel mentions like <#C1234567|channelname> with actual channel name from channelMap
   let processedText = plainText;
   if (userMap) {
-    processedText = plainText.replace(/<@([A-Z0-9]+)>/g, (match, userId) => {
+    processedText = processedText.replace(/<@([A-Z0-9]+)>/g, (match, userId) => {
       const userName = userMap.get(userId);
       return userName ? `@${userName}` : match;
+    });
+  }
+  if (channelMap) {
+    processedText = processedText.replace(/<#([A-Z0-9]+)(?:\|[^>]+)?>/g, (match, channelId) => {
+      const channelName = channelMap.get(channelId);
+      return channelName ? `#${channelName}` : match;
     });
   }
 
@@ -239,13 +267,15 @@ export default function RichTextRenderer({
   blocks,
   plainText,
   userMap,
+  channelMap,
 }: {
   blocks: any;
   plainText: string;
   userMap?: Map<string, string>;
+  channelMap?: Map<string, string>;
 }) {
   if (!blocks || blocks.length === 0) {
-    return renderPlainText(plainText, userMap);
+    return renderPlainText(plainText, userMap, channelMap);
   }
 
   try {
@@ -254,7 +284,7 @@ export default function RichTextRenderer({
         {(blocks as RichTextBlock[]).map((block, blockIndex) => (
           <div key={blockIndex}>
             {block.elements.map((element, elementIndex) =>
-              renderBlockElement(element, elementIndex, userMap),
+              renderBlockElement(element, elementIndex, userMap, channelMap),
             )}
           </div>
         ))}
@@ -262,6 +292,6 @@ export default function RichTextRenderer({
     );
   } catch (e) {
     console.warn(e);
-    return renderPlainText(plainText, userMap);
+    return renderPlainText(plainText, userMap, channelMap);
   }
 }
