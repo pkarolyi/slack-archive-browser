@@ -1,4 +1,4 @@
-import { getChannelMessages } from "@/lib/data";
+import { getChannelMessages, getAllUsers } from "@/lib/data";
 import Message from "./ui/message";
 
 export default async function Messages({
@@ -12,7 +12,12 @@ export default async function Messages({
   skip: number;
   highlightedTs?: string;
 }>) {
-  const messages = await getChannelMessages({ channelId, take, skip });
+  const [messages, users] = await Promise.all([
+    getChannelMessages({ channelId, take, skip }),
+    getAllUsers(),
+  ]);
+
+  const userMap = new Map(users.map((user) => [user.id, user.name]));
 
   return (
     <div className="h-full overflow-x-hidden overflow-y-scroll py-1 lg:px-4 lg:py-2">
@@ -21,6 +26,7 @@ export default async function Messages({
           key={message.id}
           message={message}
           highlightedTs={highlightedTs}
+          userMap={userMap}
         />
       ))}
     </div>

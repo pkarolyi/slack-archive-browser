@@ -67,6 +67,7 @@ interface RichTextBlock {
 function renderInlineElement(
   element: InlineElement,
   key: number,
+  userMap?: Map<string, string>,
 ): React.ReactNode {
   switch (element.type) {
     case "text": {
@@ -119,9 +120,10 @@ function renderInlineElement(
     }
 
     case "user": {
+      const userName = userMap?.get(element.user_id) || element.user_id;
       return (
         <span key={key} className="font-semibold text-cyan-700">
-          @{element.user_id}
+          @{userName}
         </span>
       );
     }
@@ -152,12 +154,13 @@ function renderInlineElement(
 function renderBlockElement(
   element: BlockElement,
   key: number,
+  userMap?: Map<string, string>,
 ): React.ReactNode {
   switch (element.type) {
     case "rich_text_section": {
       return (
         <span key={key}>
-          {element.elements.map((el, i) => renderInlineElement(el, i))}
+          {element.elements.map((el, i) => renderInlineElement(el, i, userMap))}
         </span>
       );
     }
@@ -173,7 +176,7 @@ function renderBlockElement(
         <ListTag key={key} className={listClass}>
           {element.elements.map((item, i) => (
             <li key={i}>
-              {item.elements.map((el, j) => renderInlineElement(el, j))}
+              {item.elements.map((el, j) => renderInlineElement(el, j, userMap))}
             </li>
           ))}
         </ListTag>
@@ -186,7 +189,7 @@ function renderBlockElement(
           key={key}
           className="border-l-4 border-stone-400 pl-4 text-stone-600 italic"
         >
-          {element.elements.map((el, i) => renderInlineElement(el, i))}
+          {element.elements.map((el, i) => renderInlineElement(el, i, userMap))}
         </blockquote>
       );
     }
@@ -215,10 +218,19 @@ function renderBlockElement(
   }
 }
 
-function renderPlainText(plainText: string) {
+function renderPlainText(plainText: string, userMap?: Map<string, string>) {
+  // Replace user mentions like <@U1234567> with actual usernames
+  let processedText = plainText;
+  if (userMap) {
+    processedText = plainText.replace(/<@([A-Z0-9]+)>/g, (match, userId) => {
+      const userName = userMap.get(userId);
+      return userName ? `@${userName}` : match;
+    });
+  }
+
   return (
     <p className="text-sm whitespace-pre-line lg:text-base">
-      {emojiConvertor.replace_colons(plainText)}
+      {emojiConvertor.replace_colons(processedText)}
     </p>
   );
 }
@@ -226,12 +238,14 @@ function renderPlainText(plainText: string) {
 export default function RichTextRenderer({
   blocks,
   plainText,
+  userMap,
 }: {
   blocks: any;
   plainText: string;
+  userMap?: Map<string, string>;
 }) {
   if (!blocks || blocks.length === 0) {
-    return renderPlainText(plainText);
+    return renderPlainText(plainText, userMap);
   }
 
   try {
@@ -240,7 +254,7 @@ export default function RichTextRenderer({
         {(blocks as RichTextBlock[]).map((block, blockIndex) => (
           <div key={blockIndex}>
             {block.elements.map((element, elementIndex) =>
-              renderBlockElement(element, elementIndex),
+              renderBlockElement(element, elementIndex, userMap),
             )}
           </div>
         ))}
@@ -248,6 +262,6 @@ export default function RichTextRenderer({
     );
   } catch (e) {
     console.warn(e);
-    return renderPlainText(plainText);
+    return renderPlainText(plainText, userMap);
   }
 }

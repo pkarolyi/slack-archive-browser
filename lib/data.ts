@@ -7,6 +7,13 @@ export async function getChannels() {
   return channels;
 }
 
+export async function getAllUsers() {
+  const users = await prisma.user.findMany({
+    select: { id: true, name: true },
+  });
+  return users;
+}
+
 export async function getGeneralChannel() {
   const channel = await prisma.channel.findFirst({
     where: { isGeneral: true },
