@@ -35,7 +35,18 @@ interface LinkElement {
   text?: string;
 }
 
-type InlineElement = TextElement | EmojiElement | UserElement | ChannelElement | LinkElement;
+interface BroadcastElement {
+  type: "broadcast";
+  range: "string";
+}
+
+type InlineElement =
+  | TextElement
+  | EmojiElement
+  | UserElement
+  | ChannelElement
+  | LinkElement
+  | BroadcastElement;
 
 interface RichTextSection {
   type: "rich_text_section";
@@ -136,7 +147,8 @@ function renderInlineElement(
     }
 
     case "channel": {
-      const channelName = channelMap?.get(element.channel_id) || element.channel_id;
+      const channelName =
+        channelMap?.get(element.channel_id) || element.channel_id;
       return (
         <Link
           key={key}
@@ -166,7 +178,7 @@ function renderInlineElement(
     case "broadcast": {
       return (
         <span key={key} className="font-semibold text-cyan-700">
-          @{(element as any).range || "channel"}
+          @{element.range || "channel"}
         </span>
       );
     }
@@ -189,7 +201,9 @@ function renderBlockElement(
     case "rich_text_section": {
       return (
         <span key={key}>
-          {element.elements.map((el, i) => renderInlineElement(el, i, userMap, channelMap))}
+          {element.elements.map((el, i) =>
+            renderInlineElement(el, i, userMap, channelMap),
+          )}
         </span>
       );
     }
@@ -205,7 +219,9 @@ function renderBlockElement(
         <ListTag key={key} className={listClass}>
           {element.elements.map((item, i) => (
             <li key={i}>
-              {item.elements.map((el, j) => renderInlineElement(el, j, userMap, channelMap))}
+              {item.elements.map((el, j) =>
+                renderInlineElement(el, j, userMap, channelMap),
+              )}
             </li>
           ))}
         </ListTag>
@@ -218,7 +234,9 @@ function renderBlockElement(
           key={key}
           className="border-l-4 border-stone-400 pl-4 text-stone-600 italic"
         >
-          {element.elements.map((el, i) => renderInlineElement(el, i, userMap, channelMap))}
+          {element.elements.map((el, i) =>
+            renderInlineElement(el, i, userMap, channelMap),
+          )}
         </blockquote>
       );
     }
@@ -247,21 +265,31 @@ function renderBlockElement(
   }
 }
 
-function renderPlainText(plainText: string, userMap?: Map<string, string>, channelMap?: Map<string, string>) {
+function renderPlainText(
+  plainText: string,
+  userMap?: Map<string, string>,
+  channelMap?: Map<string, string>,
+) {
   // Replace user mentions like <@U1234567> with actual usernames
   // Replace channel mentions like <#C1234567|channelname> with actual channel name from channelMap
   let processedText = plainText;
   if (userMap) {
-    processedText = processedText.replace(/<@([A-Z0-9]+)>/g, (match, userId) => {
-      const userName = userMap.get(userId);
-      return userName ? `@${userName}` : match;
-    });
+    processedText = processedText.replace(
+      /<@([A-Z0-9]+)>/g,
+      (match, userId) => {
+        const userName = userMap.get(userId);
+        return userName ? `@${userName}` : match;
+      },
+    );
   }
   if (channelMap) {
-    processedText = processedText.replace(/<#([A-Z0-9]+)(?:\|[^>]+)?>/g, (match, channelId) => {
-      const channelName = channelMap.get(channelId);
-      return channelName ? `#${channelName}` : match;
-    });
+    processedText = processedText.replace(
+      /<#([A-Z0-9]+)(?:\|[^>]+)?>/g,
+      (match, channelId) => {
+        const channelName = channelMap.get(channelId);
+        return channelName ? `#${channelName}` : match;
+      },
+    );
   }
 
   return (
