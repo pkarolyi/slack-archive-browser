@@ -5,11 +5,12 @@ import Content from "@/components/ui/content";
 import SearchBox from "@/components/ui/search_box";
 import { Suspense } from "react";
 
-export default function SearchPage({
-  searchParams,
-}: Readonly<{
-  searchParams: { term?: string; from?: string };
-}>) {
+export default async function SearchPage(
+  props: Readonly<{
+    searchParams: { term?: string; from?: string };
+  }>
+) {
+  const searchParams = await props.searchParams;
   return (
     <Content>
       <div className="flex flex-none flex-row justify-between gap-2 border-b border-stone-400 p-4 lg:h-16">

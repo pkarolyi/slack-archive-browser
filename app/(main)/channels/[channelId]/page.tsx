@@ -7,19 +7,20 @@ import SearchBox from "@/components/ui/search_box";
 import { getChannelMessagesCount, getChannelName } from "@/lib/data";
 import { Suspense } from "react";
 
-export default async function ChannelPage({
-  params,
-  searchParams,
-}: Readonly<{
-  params: {
-    channelId: string;
-  };
-  searchParams: {
-    page?: string;
-    size?: string;
-    hl?: string;
-  };
-}>) {
+export default async function ChannelPage(
+  props: Readonly<{
+    params: {
+      channelId: string;
+    };
+    searchParams: {
+      page?: string;
+      size?: string;
+      hl?: string;
+    };
+  }>
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const channelId = params.channelId;
   const page = Number(searchParams.page) || 1;
   const take = Number(searchParams.size) || 100;

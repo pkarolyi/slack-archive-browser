@@ -1,14 +1,15 @@
 import { getMessagePageFromTs } from "@/lib/data";
 import { redirect } from "next/navigation";
 
-export default async function ChannelMessage({
-  params,
-}: Readonly<{
-  params: {
-    channelId: string;
-    ts: string;
-  };
-}>) {
+export default async function ChannelMessage(
+  props: Readonly<{
+    params: {
+      channelId: string;
+      ts: string;
+    };
+  }>
+) {
+  const params = await props.params;
   const ts = params.ts;
   const channelId = params.channelId;
   const take = 100;

@@ -6,6 +6,7 @@ const nextConfig = {
       { hostname: "secure.gravatar.com" },
       { hostname: "a.slack-edge.com" },
     ],
+    dangerouslyAllowLocalIP: true,
   },
 };
 
