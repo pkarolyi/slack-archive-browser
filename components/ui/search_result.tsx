@@ -1,11 +1,11 @@
 import { MessageWithUserAndChannel } from "@/types/prisma";
-import { MessageType } from "@prisma/client";
 import Image from "next/image";
 import Timestamp from "./timestamp";
 import Link from "next/link";
 import RichTextRenderer from "./rich_text_renderer";
+import { MessageType } from "@/prisma/generated/prisma/enums";
 
-export default async function SearchResult({
+export default function SearchResult({
   message,
   userMap,
   channelMap,

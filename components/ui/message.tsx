@@ -6,7 +6,7 @@ import Timestamp from "./timestamp";
 import clsx from "clsx";
 import { useEffect, useRef } from "react";
 import MessageReactions from "./message_reactions";
-import MeassageActions from "./message_actions";
+import MessageActions from "./message_actions";
 import RichTextRenderer from "./rich_text_renderer";
 
 export default function Message({
@@ -44,7 +44,7 @@ export default function Message({
         )}
         ref={messageRef}
       >
-        <MeassageActions message={message} />
+        <MessageActions message={message} />
         <div className="flex flex-row items-start gap-2">
           {message.user.imageUrl && (
             <div className="mt-1 flex-none">

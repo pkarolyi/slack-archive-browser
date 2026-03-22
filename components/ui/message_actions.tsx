@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import ShareIcon from "../icons/share";
 
-export default function MeassageActions({
+export default function MessageActions({
   message,
 }: {
   message: { channelId: string; ts: string };

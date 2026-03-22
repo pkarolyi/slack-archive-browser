@@ -16,6 +16,6 @@ export default async function ChannelMessage({
   const messagePage = await getMessagePageFromTs({ channelId, ts, take });
 
   return redirect(
-    `/channels/${channelId}?hl=${ts}&page=${messagePage}&take=${take}`,
+    `/channels/${channelId}?hl=${ts}&page=${messagePage}&size=${take}`,
   );
 }

@@ -1,9 +1,9 @@
 {
   "name": "slack-archive-browser",
-  "version": "0.3.0",
+  "version": "^0.3.0",
   "private": true,
   "scripts": {
-    "dev": "scripts/start_local_db.sh && next dev && scripts/stop_local_db.sh",
+    "dev": "scripts/start_local_db.sh && next dev ; scripts/stop_local_db.sh",
     "build": "next build",
     "build:vercel": "prisma generate && next build",
     "start": "next start",
@@ -17,36 +17,38 @@
     "archive:reset": "scripts/start_local_db.sh && prisma migrate reset && tsx scripts/archive_to_db.ts .archive && scripts/stop_local_db.sh"
   },
   "dependencies": {
-    "@prisma/client": "6.2.1",
-    "clsx": "2.1.1",
-    "emoji-js": "3.8.1",
-    "next": "14.2.23",
-    "next-auth": "4.24.11",
-    "react": "18.3.0",
-    "react-dom": "18.3.0",
-    "react-toastify": "11.0.3",
-    "server-only": "0.0.1",
-    "use-debounce": "10.0.4"
+    "@prisma/adapter-pg": "^7.5.0",
+    "@prisma/client": "^7.5.0",
+    "clsx": "^2.1.1",
+    "emoji-js": "^3.9.0",
+    "next": "^14.2.35",
+    "next-auth": "^4.24.13",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-toastify": "^11.0.5",
+    "server-only": "^0.0.1",
+    "use-debounce": "^10.1.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "4.0.0",
-    "@types/emoji-js": "3.5.2",
-    "@types/node": "22.10.10",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
-    "@typescript-eslint/parser": "8.21.0",
-    "eslint": "8.57.1",
-    "eslint-config-next": "14.2.23",
-    "eslint-config-prettier": "10.0.1",
-    "postcss": "8.5.1",
-    "prettier": "3.4.2",
-    "prettier-plugin-tailwindcss": "0.6.11",
-    "prisma": "6.2.1",
-    "tailwindcss": "4.0.0",
-    "tsx": "4.19.2",
-    "typescript": "5.7.3"
+    "@tailwindcss/postcss": "^4.2.2",
+    "@types/emoji-js": "^3.5.2",
+    "@types/node": "^24.12.0",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/parser": "^8.57.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.35",
+    "eslint-config-prettier": "^10.1.8",
+    "postcss": "^8.5.8",
+    "prettier": "^3.8.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "prisma": "^7.5.0",
+    "tailwindcss": "^4.2.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   },
   "engines": {
-    "node": "^22"
-  }
+    "node": "^24"
+  },
+  "packageManager": "pnpm@10.26.2+sha512.0e308ff2005fc7410366f154f625f6631ab2b16b1d2e70238444dd6ae9d630a8482d92a451144debc492416896ed16f7b114a86ec68b8404b2443869e68ffda6"
 }

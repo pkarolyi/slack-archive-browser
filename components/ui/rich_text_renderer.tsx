@@ -163,6 +163,14 @@ function renderInlineElement(
       );
     }
 
+    case "broadcast": {
+      return (
+        <span key={key} className="font-semibold text-cyan-700">
+          @{(element as any).range || "channel"}
+        </span>
+      );
+    }
+
     default: {
       throw new Error(
         `Unknown inline element type: (${(element as any).type})`,

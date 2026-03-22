@@ -1,18 +1,19 @@
 import { prisma } from "@/lib/prisma";
-import { MessageType } from "@prisma/client";
+import { MessageType } from "@/prisma/generated/prisma/enums";
+import { cache } from "react";
 import "server-only";
 
-export async function getChannels() {
+export const getChannels = cache(async () => {
   const channels = await prisma.channel.findMany();
   return channels;
-}
+});
 
-export async function getAllUsers() {
+export const getAllUsers = cache(async () => {
   const users = await prisma.user.findMany({
     select: { id: true, name: true },
   });
   return users;
-}
+});
 
 export async function getGeneralChannel() {
   const channel = await prisma.channel.findFirst({
@@ -84,6 +85,7 @@ export async function getChannelMessages({
       user: true,
       reactions: { include: { user: true } },
       threadReplies: {
+        orderBy: { ts: "asc" },
         include: { user: true, reactions: { include: { user: true } } },
       },
     },
@@ -115,9 +117,9 @@ export async function searchMessages({ term }: { term?: string }) {
       AND: [
         {
           OR: [
-            { text: { contains: term } },
+            { text: { contains: term, mode: "insensitive" } },
             { isoDate: { contains: term } },
-            { user: { name: { contains: term } } },
+            { user: { name: { contains: term, mode: "insensitive" } } },
           ],
         },
       ],

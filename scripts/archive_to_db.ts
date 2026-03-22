@@ -1,4 +1,7 @@
-import { MessageType, PrismaClient } from "@prisma/client";
+import "dotenv/config";
+import { PrismaClient } from "../prisma/generated/prisma/client.js";
+import { MessageType } from "../prisma/generated/prisma/enums.js";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { randomUUID } from "crypto";
 import fs from "fs";
 import path from "path";
@@ -7,11 +10,25 @@ console.log(
   "Assuming clean database. If you have previous messages loaded reset the database!",
 );
 
-const prisma = new PrismaClient({});
+const adapter = new PrismaPg({
+  connectionString: process.env.POSTGRES_URL,
+});
+const prisma = new PrismaClient({ adapter });
 
 const ARCHIVE_DIR = path.join(process.cwd(), process.argv[2]);
 
 const ONLY = process.argv[3] || null;
+
+const BATCH_SIZE = 5000;
+
+function escapeSQL(str: string): string {
+  return str.replace(/'/g, "''");
+}
+
+function sqlVal(val: string | null): string {
+  if (val === null) return "NULL";
+  return `'${escapeSQL(val)}'`;
+}
 
 async function createUsers(users: any[]) {
   // create user from users.json
@@ -103,9 +120,12 @@ async function createMessages(
       type: message.type,
       isoDate: new Date(message.ts.split(".")[0] * 1000).toISOString(),
       text: message.text || "[empty_message_text]",
-      blocks: message.blocks || null,
+      blocks: message.blocks
+        ? JSON.stringify(message.blocks)
+        : null,
       userId: message.user,
       channelId: channelId,
+      parentId: null as string | null,
     });
 
     // process reactions
@@ -124,7 +144,6 @@ async function createMessages(
   }
 
   // for thread messages we need to find their parent
-  const finalMessages: any[] = [];
   for (const message of processedMessages) {
     if (
       message.type === MessageType.THREAD_CHILD ||
@@ -139,19 +158,35 @@ async function createMessages(
         throw new Error();
       }
     }
-
-    finalMessages.push(message);
   }
 
-  console.log(`    creating messages...`);
-  await prisma.message.createMany({
-    data: finalMessages,
-  });
+  console.log(`    creating ${processedMessages.length} messages...`);
+  for (let i = 0; i < processedMessages.length; i += BATCH_SIZE) {
+    const batch = processedMessages.slice(i, i + BATCH_SIZE);
+    const values = batch
+      .map(
+        (m) =>
+          `(${sqlVal(m.id)},${sqlVal(m.ts)},${sqlVal(m.isoDate)},${sqlVal(m.text)},${m.blocks ? `'${escapeSQL(m.blocks)}'::jsonb` : "NULL"},${sqlVal(m.type)},${sqlVal(m.channelId)},${sqlVal(m.userId)},${sqlVal(m.parentId)})`,
+      )
+      .join(",");
+    await prisma.$executeRawUnsafe(
+      `INSERT INTO "Message" ("id","ts","isoDate","text","blocks","type","channelId","userId","parentId") VALUES ${values}`,
+    );
+  }
 
-  console.log(`    creating reactions...`);
-  await prisma.reaction.createMany({
-    data: reactions,
-  });
+  console.log(`    creating ${reactions.length} reactions...`);
+  for (let i = 0; i < reactions.length; i += BATCH_SIZE) {
+    const batch = reactions.slice(i, i + BATCH_SIZE);
+    const values = batch
+      .map(
+        (r) =>
+          `(${sqlVal(r.id)},${sqlVal(r.name)},${sqlVal(r.messageId)},${sqlVal(r.userId)})`,
+      )
+      .join(",");
+    await prisma.$executeRawUnsafe(
+      `INSERT INTO "Reaction" ("id","name","messageId","userId") VALUES ${values}`,
+    );
+  }
 }
 
 async function createChannels(users: any[], channels: any[]) {

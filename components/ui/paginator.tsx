@@ -49,6 +49,8 @@ export default function Paginator({
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1");
 
+  if (pageCount <= 1) return null;
+
   const middleLength = Math.min(5, pageCount - 2);
   const middleComponents = Array.from(
     { length: middleLength },

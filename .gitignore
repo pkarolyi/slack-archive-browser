@@ -41,4 +41,7 @@ next-env.d.ts
 # local db data
 .postgres-data
 
+# prisma
+prisma/generated
+
 TODO
