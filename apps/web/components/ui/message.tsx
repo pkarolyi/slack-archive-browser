@@ -1,6 +1,6 @@
 "use client";
 
-import type { MessageWithUserReactionThread } from "@/types/prisma";
+import type { MessageWithUserReactionThread } from "@sab/db";
 import Image from "next/image";
 import Timestamp from "./timestamp";
 import clsx from "clsx";

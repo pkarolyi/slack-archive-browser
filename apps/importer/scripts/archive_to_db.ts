@@ -1,6 +1,5 @@
 import "dotenv/config";
-import { PrismaClient } from "../prisma/generated/prisma/client.js";
-import { MessageType } from "../prisma/generated/prisma/enums.js";
+import { PrismaClient, MessageType } from "@sab/db";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { randomUUID } from "crypto";
 import fs from "fs";

@@ -1,4 +1,4 @@
-import type { Reaction } from "@/types/prisma";
+import type { Reaction } from "@sab/db";
 import Emoji from "./emoji";
 
 export default function MessageReactions({

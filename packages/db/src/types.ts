@@ -1,4 +1,4 @@
-import { Prisma } from "@/prisma/generated/prisma/client";
+import type { Prisma } from "../prisma/generated/prisma/client";
 
 export type MessageWithUserReactionThread = Prisma.MessageGetPayload<{
   include: {

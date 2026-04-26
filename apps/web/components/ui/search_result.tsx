@@ -1,9 +1,8 @@
-import { MessageWithUserAndChannel } from "@/types/prisma";
+import { MessageWithUserAndChannel, MessageType } from "@sab/db";
 import Image from "next/image";
 import Timestamp from "./timestamp";
 import Link from "next/link";
 import RichTextRenderer from "./rich_text_renderer";
-import { MessageType } from "@/prisma/generated/prisma/enums";
 
 export default function SearchResult({
   message,

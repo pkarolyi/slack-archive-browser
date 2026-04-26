@@ -1,5 +1,4 @@
-import { prisma } from "@/lib/prisma";
-import { MessageType } from "@/prisma/generated/prisma/enums";
+import { prisma, MessageType } from "@sab/db";
 import { cache } from "react";
 import "server-only";
 

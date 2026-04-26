@@ -1,6 +1,6 @@
 "use client";
 
-import type { Channel } from "@/types/prisma";
+import type { Channel } from "@sab/db";
 import clsx from "clsx";
 import Link from "next/link";
 import { useParams } from "next/navigation";

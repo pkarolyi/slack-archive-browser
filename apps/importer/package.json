@@ -1,0 +1,23 @@
+{
+  "name": "@sab/importer",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "lint": "tsc --noemit",
+    "archive:import": "tsx scripts/archive_to_db.ts ../../.archive",
+    "archive:import:test": "tsx scripts/archive_to_db.ts ../../.archive export-test"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.5.0",
+    "@sab/db": "workspace:*",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.12.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
